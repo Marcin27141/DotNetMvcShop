@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Canvas";
+}
+
+@section styles{
+    <link rel="Stylesheet" href="~/css/canvas_page_styling.css" />
+}
+
+
+<div class="canvas-div">
+    <canvas class="mainCanvas" width="500" height="500"></canvas>
+</div>
+<div class="canvas-div">
+    <canvas class="mainCanvas" width="50" height="1000"></canvas>
+</div>
+<div class="canvas-div">
+    <canvas class="mainCanvas" width="2000" height="200"></canvas>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/canvasMoving.js"></script>
+}
