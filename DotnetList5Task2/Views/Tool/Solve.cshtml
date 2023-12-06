@@ -1,0 +1,19 @@
+﻿@model DotnetList5Task2.Models.ToolViewModel
+@{
+    ViewData["Title"] = "Quadratic";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Equation: @Model.aCoefficient x^2 + @Model.bCoefficient x + @Model.cCoefficient</h1>
+    <div>
+        <h3>This equation has @Model.NumberOfResults solutions</h3>
+        @if (Model.NumberOfResults > 0)
+        {
+            <h4>@Model.LowerResult</h4>
+        }
+        @if (Model.NumberOfResults == 2)
+        {
+            <h4>@Model.HigherResult</h4>
+        }
+    </div>
+</div>
