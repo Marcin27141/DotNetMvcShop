@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Guessing";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Generate the secret or start guessing</h1>
+    @if (TempData["MESSAGE"] != null)
+    {
+        <p>@TempData["MESSAGE"]</p>
+    }
+</div>

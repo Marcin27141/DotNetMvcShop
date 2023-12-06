@@ -1,0 +1,33 @@
+﻿@model DotnetList5Task2.Models.Game.GameViewModel
+@{
+    ViewData["Title"] = "Guessing";
+}
+
+<div class="text-center">
+    <div>
+        <h3>
+            @if (Model.SuccessfullyGuessed)
+            {
+                @:You guessed it!
+            } else
+            {
+                @:Incorrect!
+            }
+        </h3>
+        <h4>Number of guesses: @Model.GuessesTaken</h4>
+        @if (!Model.SuccessfullyGuessed)
+        {
+            <p>
+                @if (Model.MoreOrLess < 0)
+                {
+                    @:You should try a bigger number
+                }
+                else
+                {
+                    @:Your number is too big
+                }
+            </p>
+        }
+        
+    </div>
+</div>
