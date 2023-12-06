@@ -1,19 +1,40 @@
 ﻿@model DotnetList5Task2.Models.ToolViewModel
 @{
     ViewData["Title"] = "Quadratic";
+    string solutionsClass = Model.NumberOfResults switch
+    {
+        1 => "oneSolution",
+        2 => "twoSolutions",
+        _ => "zeroSolutions",
+    };
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/quadratic_equation.css" />
 }
 
 <div class="text-center">
-    <h1 class="display-4">Equation: @Model.aCoefficient x^2 + @Model.bCoefficient x + @Model.cCoefficient</h1>
-    <div>
-        <h3>This equation has @Model.NumberOfResults solutions</h3>
+    <h1 class="display-4 equation @solutionsClass">
+        Equation:
+        @(Model.aCoefficient)x<sup>2</sup>
+        @if (Model.bCoefficientAbsolute != 0)
+        {
+            @(Model.bCoefficientSign) @(Model.bCoefficientAbsolute)@: x
+        }
+        @if (Model.cCoefficientAbsolute != 0)
+        {
+            @(Model.cCoefficientSign)@(Model.cCoefficientAbsolute)
+        }
+    </h1>
+    <div class="@solutionsClass">
+        <h3 class="solutionNumberContainer @solutionsClass">This equation has @Model.NumberOfResults solutions</h3>
         @if (Model.NumberOfResults > 0)
         {
-            <h4>@Model.LowerResult</h4>
+            <h4 class="solution lowerSolution @solutionsClass">x<sub>1</sub> = @Model.LowerResult</h4>
         }
         @if (Model.NumberOfResults == 2)
         {
-            <h4>@Model.HigherResult</h4>
+            <h4 class="solution greaterSolution @solutionsClass">x<sub>2</sub> = @Model.HigherResult</h4>
         }
     </div>
 </div>

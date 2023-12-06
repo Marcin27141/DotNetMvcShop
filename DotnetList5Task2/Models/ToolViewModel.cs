@@ -6,7 +6,11 @@
         public double LowerResult { get; set; } = 0;
         public double HigherResult { get; set; } = 0;
         public int aCoefficient { get; set; }
-        public int bCoefficient { get; set; }
-        public int cCoefficient { get; set; }
+
+        public char bCoefficientSign { get; set; }
+        public int bCoefficientAbsolute { get; set; }
+
+        public char cCoefficientSign { get; set; }
+        public int cCoefficientAbsolute { get; set; }
     }
 }

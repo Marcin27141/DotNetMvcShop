@@ -1,0 +1,58 @@
+﻿.equation {
+    text-align: center;
+    width: auto;
+    margin: auto;
+    margin-top: 100px;
+    border: solid 3px gray;
+    padding: 5px;
+}
+
+
+.equation.zeroSolutions {
+    background-color: rgb(255, 127, 127);
+}
+.equation.oneSolution {
+    background-color: rgb(173, 216, 230);
+}
+
+.equation.twoSolutions {
+    background-color: rgb(144, 238, 144);
+}
+
+
+.solutionNumberContainer .zeroSolutions {
+    background-color: red;
+    color: red;
+}
+
+.solutionNumberContainer .oneSolution {
+    background-color: blue;
+    color: blue;
+}
+
+.solutionNumberContainer .twoSolutions {
+    background-color: greenyellow;
+    color: greenyellow;
+}
+
+.solutionNumberContainer.zeroSolutions {
+    color: red;
+}
+
+.solutionNumberContainer.oneSolution {
+    color: blue;
+}
+
+.solutionNumberContainer.twoSolutions {
+    color: forestgreen;
+}
+
+.solution {
+    background-color: white;
+    border: solid 2px gray;
+    padding: 2px;
+}
+
+.solution.oneSolution {
+    border: dashed 2px gray;
+}

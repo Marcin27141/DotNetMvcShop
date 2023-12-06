@@ -1,5 +1,6 @@
 ﻿using DotnetList5Task2.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 namespace DotnetMvcTasks.Controllers
 {
@@ -24,8 +25,11 @@ namespace DotnetMvcTasks.Controllers
             var model = new ToolViewModel
             {
                 aCoefficient = a,
-                bCoefficient = b,
-                cCoefficient = c,
+                bCoefficientSign = GetSign(b),
+                bCoefficientAbsolute = Math.Abs(b),
+                cCoefficientSign = GetSign(c),
+                cCoefficientAbsolute = Math.Abs(c),
+
                 NumberOfResults = numberOfResults,
                 LowerResult = lowerResult,
                 HigherResult = higherResult
@@ -33,6 +37,8 @@ namespace DotnetMvcTasks.Controllers
 
             return View(model);
         }
+
+        private char GetSign(double number) => number >= 0 ? '+' : '-';
 
         public IActionResult ZeroError()
         {
