@@ -4,7 +4,7 @@
 
 
 
-@if (TempData["MESSAGE"] != null)
+@if (TempData["SUCCESS_MESSAGE"] != null || TempData["ERROR_MESSAGE"] != null)
 {
     <script src="/lib/jquery//dist/jquery.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
@@ -13,14 +13,69 @@
         toastr.options = {
             "positionClass": "toast-bottom-right",
         };
-        toastr.success('@TempData["MESSAGE"]');
+
+        var successMessage = '@TempData["SUCCESS_MESSAGE"]';
+        var errorMessage = '@TempData["ERROR_MESSAGE"]';
+
+        if (successMessage !== "") {
+            toastr.success(successMessage);
+        } else if (errorMessage !== "") {
+            toastr.error(errorMessage);
+        }
+        
         setTimeout(function () {
             toastr.clear();
         }, 2000);
     </script>
 }
 
+<style>
+    .outer-form-container {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+    }
+
+    form p {
+        margin-bottom: 5px;
+    }
+
+    .form-container {
+        margin-bottom: 30px;
+    }
+</style>
+
 
 <div class="text-center">
     <h1 class="display-4">Generate the secret or start guessing</h1>
 </div>
+
+<div class="outer-form-container">
+    <div class="form-container">
+        <form action="Set,{ceiling}" method="post">
+            <p>Set guessing range:</p>
+            <input type="number" name="ceiling" />
+            <input type="submit" value="Set" />
+        </form>
+    </div>
+
+    <div class="form-container">
+        <form action="Draw" method="post">
+            <p>Generate a secret number:</p>
+            <input type="submit" value="Generate" />
+        </form>
+    </div>
+
+    <div class="form-container">
+        <form action="Guess,{guess}" method="post">
+            <p>Take a first guess:</p>
+            <input type="number" name="guess" />
+            <input type="submit" value="Guess" />
+        </form>
+    </div>
+</div>
+
+
+
+

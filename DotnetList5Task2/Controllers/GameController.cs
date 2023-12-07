@@ -6,7 +6,8 @@ namespace DotnetList5Task2.Controllers
 {
     public class GameController : Controller
     {
-        private const string INDEX_MESSAGE = "MESSAGE";
+        private const string SUCCESS_MESSAGE = "SUCCESS_MESSAGE";
+        private const string ERROR_MESSAGE = "ERROR_MESSAGE";
         private static Random _random = new Random();
         private static int _guessingCeiling = 10;
         private static int secretNumber = 0;
@@ -20,8 +21,14 @@ namespace DotnetList5Task2.Controllers
         [Route("Set,{ceiling}")]
         public IActionResult SetCeiling(int ceiling)
         {
-            _guessingCeiling = ceiling;
-            TempData[INDEX_MESSAGE] = "New guessing range was set";
+            if (ceiling > 0)
+            {
+                _guessingCeiling = ceiling;
+                TempData[SUCCESS_MESSAGE] = "New guessing range was set";
+            }
+            else
+                TempData[ERROR_MESSAGE] = "Range must be greater than 0";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -30,7 +37,7 @@ namespace DotnetList5Task2.Controllers
         {
             secretNumber = _random.Next(0, _guessingCeiling);
             _guessesTaken = 0;
-            TempData[INDEX_MESSAGE] = "New secret number was generated";
+            TempData[SUCCESS_MESSAGE] = "New secret number was generated";
             return RedirectToAction(nameof(Index));
         }
 
