@@ -27,10 +27,12 @@ namespace DotnetList5Task2.Controllers
         // GET: ArticlesController/Create
         public ActionResult Create()
         {
-            var categoriesSelect = ArticleCategory.GetCategories().Select(cat => new SelectListItem() { Text = cat, Value = cat });
-            //categoriesSelect.Insert(0, (new SelectListItem { Text = "Categories", Value = "none", Selected = true }));
+            return View(new CreateArticle() { AvailableCategories = GetAvailableCategories(), ExpiryDate = DateOnly.FromDateTime(DateTime.Today) });
+        }
 
-            return View(new CreateArticle() { AvailableCategories = categoriesSelect, ExpiryDate = DateOnly.FromDateTime(DateTime.Today) });
+        private static IEnumerable<SelectListItem> GetAvailableCategories()
+        {
+            return ArticleCategory.GetCategories().Select(cat => new SelectListItem() { Text = cat, Value = cat });
         }
 
         // POST: ArticlesController/Create
@@ -51,45 +53,44 @@ namespace DotnetList5Task2.Controllers
         }
 
         // GET: ArticlesController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
-            return View();
+            var student = _articleRepository.GetById(id);
+            if (student != null )
+                student.AvailableCategories = GetAvailableCategories();
+            return View(student);
         }
 
         // POST: ArticlesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Guid id, IFormCollection collection)
         {
-            try
+            Article article = new Article
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                Id = id,
+                Name = collection["Name"],
+                Price = Convert.ToDecimal(collection["Price"]),
+                ExpiryDate = DateOnly.Parse(collection["ExpiryDate"]),
+                Categories = collection["Categories"]
+            };
+            _articleRepository.UpdateArticle(article);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: ArticlesController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
-            return View();
+            return View(_articleRepository.GetById(id));
         }
 
         // POST: ArticlesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(Guid id, IFormCollection collection)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _articleRepository.DeleteArticle(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

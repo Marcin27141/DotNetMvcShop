@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DotnetList5Task2.Models.Shop
@@ -12,5 +13,6 @@ namespace DotnetList5Task2.Models.Shop
         [DisplayName("Expiry Date")]
         public DateOnly ExpiryDate { get; set; }
         public IEnumerable<string> Categories { get; set; } = new List<string>();
+        public IEnumerable<SelectListItem> AvailableCategories { get; set; } = new List<SelectListItem>();
     }
 }
