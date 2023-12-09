@@ -1,6 +1,10 @@
-﻿using DotnetList5Task2.Models.Shop.Repositories;
+﻿using DotnetList5Task2.Models.Shop;
+using DotnetList5Task2.Models.Shop.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Globalization;
+using System.Xml.Linq;
 
 namespace DotnetList5Task2.Controllers
 {
@@ -15,15 +19,18 @@ namespace DotnetList5Task2.Controllers
         }
 
         // GET: ArticlesController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
-            return View();
+            return View(_articleRepository.GetById(id));
         }
 
         // GET: ArticlesController/Create
         public ActionResult Create()
         {
-            return View();
+            var categoriesSelect = ArticleCategory.GetCategories().Select(cat => new SelectListItem() { Text = cat, Value = cat });
+            //categoriesSelect.Insert(0, (new SelectListItem { Text = "Categories", Value = "none", Selected = true }));
+
+            return View(new CreateArticle() { AvailableCategories = categoriesSelect, ExpiryDate = DateOnly.FromDateTime(DateTime.Today) });
         }
 
         // POST: ArticlesController/Create
@@ -31,14 +38,16 @@ namespace DotnetList5Task2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
-            try
+            Article article = new Article
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                Id = Guid.NewGuid(),
+                Name = collection["Name"],
+                Price = Convert.ToDecimal(collection["Price"]),
+                ExpiryDate = DateOnly.Parse(collection["ExpiryDate"]),
+                Categories = collection["Categories"]
+            };
+            _articleRepository.AddArticle(article);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: ArticlesController/Edit/5

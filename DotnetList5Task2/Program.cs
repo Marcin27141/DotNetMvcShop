@@ -8,6 +8,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IArticleRepository, ArticleListRepository>();
 //builder.Services.AddSingleton<IArticleRepository, ArticleDictionaryRepository>();
 
+System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("en-EN");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

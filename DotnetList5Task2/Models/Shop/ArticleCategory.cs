@@ -1,14 +1,19 @@
 ﻿namespace DotnetList5Task2.Models.Shop
 {
-    public enum ArticleCategory
+    public class ArticleCategory
     {
-        Food,
-        BoardGame,
-        ComputerGame,
-        Book,
-        Furniture,
-        Music,
-        School,
-        Animals
+        private readonly static List<string> _categories = new List<string>()
+        {
+            "Food",
+            "Board Game",
+            "Computer Game",
+            "Book",
+            "Furniture",
+            "Music",
+            "School",
+            "Animals"
+        };
+
+        public static List<string> GetCategories() => _categories;
     }
 }
