@@ -1,4 +1,7 @@
-﻿namespace DotnetList5Task2.Models.Shop
+﻿
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace DotnetList5Task2.Models.Shop
 {
     public class ArticleCategory
     {
@@ -15,5 +18,9 @@
         };
 
         public static List<string> GetCategories() => _categories;
+        public static IEnumerable<SelectListItem> GetSelectableCategories()
+        {
+            return _categories.Select(cat => new SelectListItem() { Text = cat, Value = cat });
+        }
     }
 }

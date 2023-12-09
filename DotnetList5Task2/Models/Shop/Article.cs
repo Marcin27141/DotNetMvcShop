@@ -11,8 +11,8 @@ namespace DotnetList5Task2.Models.Shop
         public decimal Price { get; set; }
 
         [DisplayName("Expiry Date")]
-        public DateOnly ExpiryDate { get; set; }
+        public DateOnly ExpiryDate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
         public IEnumerable<string> Categories { get; set; } = new List<string>();
-        public IEnumerable<SelectListItem> AvailableCategories { get; set; } = new List<SelectListItem>();
+        public IEnumerable<SelectListItem> AvailableCategories { get; set; } = ArticleCategory.GetSelectableCategories();
     }
 }

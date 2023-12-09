@@ -27,12 +27,7 @@ namespace DotnetList5Task2.Controllers
         // GET: ArticlesController/Create
         public ActionResult Create()
         {
-            return View(new CreateArticle() { AvailableCategories = GetAvailableCategories(), ExpiryDate = DateOnly.FromDateTime(DateTime.Today) });
-        }
-
-        private static IEnumerable<SelectListItem> GetAvailableCategories()
-        {
-            return ArticleCategory.GetCategories().Select(cat => new SelectListItem() { Text = cat, Value = cat });
+            return View(new Article());
         }
 
         // POST: ArticlesController/Create
@@ -55,10 +50,7 @@ namespace DotnetList5Task2.Controllers
         // GET: ArticlesController/Edit/5
         public ActionResult Edit(Guid id)
         {
-            var student = _articleRepository.GetById(id);
-            if (student != null )
-                student.AvailableCategories = GetAvailableCategories();
-            return View(student);
+            return View(_articleRepository.GetById(id));
         }
 
         // POST: ArticlesController/Edit/5
