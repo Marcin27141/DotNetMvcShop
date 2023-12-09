@@ -1,7 +1,12 @@
+using DotnetList5Task2.Models.Shop.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<IArticleRepository, ArticleListRepository>();
+//builder.Services.AddSingleton<IArticleRepository, ArticleDictionaryRepository>();
 
 var app = builder.Build();
 
