@@ -2,7 +2,9 @@
     ViewData["Title"] = "Guessing";
 }
 
-
+@section styles {
+    <link rel="Stylesheet" href="~/css/guessing_game.css" />
+}
 
 @if (TempData["SUCCESS_MESSAGE"] != null || TempData["ERROR_MESSAGE"] != null)
 {
@@ -28,23 +30,6 @@
         }, 2000);
     </script>
 }
-
-<style>
-    .outer-form-container {
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        margin: 10px;
-    }
-
-    form p {
-        margin-bottom: 5px;
-    }
-
-    .form-container {
-        margin-bottom: 30px;
-    }
-</style>
 
 
 <div class="text-center">

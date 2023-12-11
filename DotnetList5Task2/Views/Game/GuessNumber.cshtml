@@ -3,6 +3,10 @@
     ViewData["Title"] = "Guessing";
 }
 
+@section styles {
+    <link rel="Stylesheet" href="~/css/guessing_game.css" />
+}
+
 <div class="text-center">
     <div>
         <h3>
@@ -30,11 +34,21 @@
         }
         
     </div>
-    <div class="form-container">
-        <form action="Guess,{guess}" method="post">
-            <p>Take a guess:</p>
-            <input type="number" name="guess" />
-            <input type="submit" value="Guess" />
-        </form>
+    <div class="outer-form-container">
+        <div class="form-container">
+            <form action="Guess,{guess}" method="post">
+                <p>Take a guess:</p>
+                <input disabled="@Model.SuccessfullyGuessed" type="number" name="guess" />
+                <input disabled="@Model.SuccessfullyGuessed" type="submit" value="Guess" />
+            </form>
+        </div>
+        @if (Model.SuccessfullyGuessed)
+        {
+            <div class="form-container">
+                <form action="Game" method="get">
+                    <input type="submit" value="Play again"/>
+                </form>
+            </div>
+        }
     </div>
 </div>
