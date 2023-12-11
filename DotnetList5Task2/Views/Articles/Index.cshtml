@@ -4,44 +4,48 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+@section styles {
+    <link rel="Stylesheet" href="~/css/list_with_search.css" />
+}
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+<div class="table-container">
+    <h1>Articles</h1>
+    <div class="upper-div">
+        <input type="search" id="searchbar" placeholder="Search.." name="query">
+        <p class="newLink">
+            <a asp-action="Create">Create a new article</a>
+        </p>
+    </div>
+    <table class="main-table" id="searchTable">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
+                ID
             </th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                    @Html.ActionLink("Edit", "Edit", new { item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { item.Id })
-            </td>
-        </tr>
+
+        @foreach (var article in Model)
+        {
+            <tr>
+                <td>
+                    @article.Name
+                </td>
+                <td>
+                    @article.Id
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { article.Id }) |
+                    @Html.ActionLink("Details", "Details", new { article.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { article.Id })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/listWithSearch.js"></script>
 }
-    </tbody>
-</table>

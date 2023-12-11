@@ -5,10 +5,8 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/form_styling.css" />
+    <link rel="Stylesheet" href="~/css/form_styling_v4.css" />
 }
-
-<h1>Create</h1>
 
 <div class="outer-form-container">
     <form asp-action="Create">
@@ -17,13 +15,15 @@
         @await Html.PartialAsync("_ArticleProperties", Model)
 
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <button type="submit">
+                Submit
+            </button>
         </div>
     </form>
 </div>
 
 @section return_link {
-    <div>
+    <div class="return-link">
         <a asp-action="Index">Back to List</a>
     </div>
 }
