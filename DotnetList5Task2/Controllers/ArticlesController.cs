@@ -67,7 +67,7 @@ namespace DotnetList5Task2.Controllers
                 Categories = collection["Categories"]
             };
             _articleRepository.UpdateArticle(article);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         // GET: ArticlesController/Delete/5

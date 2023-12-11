@@ -4,45 +4,45 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+@section styles {
+    <link rel="Stylesheet" href="~/css/single_result.css" />
+    <link rel="Stylesheet" href="~/css/delete_article.css" />
+}
 
-<h3>Are you sure you want to delete @Model.Name</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ExpiryDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ExpiryDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Categories)
-        </dt>
-        <dd class="col-sm-10">
-            @String.Join(", ", Model.Categories)
-        </dd>
-    </dl>
-    
+<h3 class="title">Are you sure you want to delete @Model.Name</h3>
+
+<div class="single-result">
+    <h1>@Model.Name</h1>
+    <div class="key-value-result">
+        <h2>Name</h2>
+        <h4>@Model.Name</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Id</h2>
+        <h4>@Model.Id</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Price</h2>
+        <h4>@Model.Price</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Expiry date</h2>
+        <h4>@Model.ExpiryDate</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Categories</h2>
+        <h4>@String.Join(", ", Model.Categories)</h4>
+    </div>
+</div>
+<div class="button-div">
     <form asp-action="Delete">
         <input type="submit" value="Delete" class="btn btn-danger" />
     </form>
 </div>
+
+@section return_link {
+    <div class="return-link">
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+

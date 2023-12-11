@@ -5,29 +5,32 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/form_styling.css" />
+    <link rel="Stylesheet" href="~/css/form_styling_v4.css" />
 }
 
-<h1>Edit</h1>
+<div class="outer-form-container">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Id" hidden class="form-control" />
 
-<h4>Article</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="Id" hidden class="form-control" />
+        @await Html.PartialAsync("_ArticleProperties", Model)
 
-            @await Html.PartialAsync("_ArticleProperties", Model)
-          
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        <div class="form-group">
+            <button type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
 </div>
 
+@section return_link {
+    <div class="return-link">
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
