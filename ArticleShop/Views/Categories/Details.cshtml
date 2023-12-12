@@ -1,0 +1,27 @@
+﻿@model ArticleShop.Models.Database.Category
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/single_result.css" />
+}
+
+<div class="single-result">
+    <h1>@Model.Name</h1>
+    <div class="key-value-result">
+        <h2>Name</h2>
+        <h4>@Model.Name</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Id</h2>
+        <h4>@Model.Id</h4>
+    </div>
+</div>
+
+@section return_link {
+    <div class="return-link">
+        <a asp-action="Index">Back to List</a>
+    </div>
+}

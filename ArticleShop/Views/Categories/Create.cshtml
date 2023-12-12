@@ -1,0 +1,37 @@
+﻿@model ArticleShop.Models.Database.Category
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/form_styling_v4.css" />
+}
+
+<div class="outer-form-container">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
+
+@section return_link {
+    <div class="return-link">
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

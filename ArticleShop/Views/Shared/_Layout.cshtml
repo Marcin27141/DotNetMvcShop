@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ArticleShop.styles.css" asp-append-version="true" />
+    @RenderSection("styles", false)
 </head>
 <body>
     <header>
@@ -30,14 +31,16 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <main class="outer-main">
+        <div class="inner-main">
             @RenderBody()
-        </main>
-    </div>
+            @await RenderSectionAsync("return_link", required: false)
+        </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    </main>
+
+    <footer>
+        <div class="footer-container">
             &copy; 2023 - ArticleShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
