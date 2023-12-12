@@ -11,6 +11,9 @@ namespace ArticleShop.Models.Database
 
         [DisplayName("Expiry Date")]
         public DateOnly ExpiryDate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
+
+        //relations
         public Category Category { get; set; }
+        public Guid CategoryId { get; set; }
     }
 }
