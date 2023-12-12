@@ -24,11 +24,15 @@
             <p>
                 @if (Model.MoreOrLess < 0)
                 {
-                    @:You should try a bigger number
+                    @:You should try bigger numbers
+                }
+                else if (Model.MoreOrLess > 0)
+                {
+                    @:Your numbers are too big
                 }
                 else
                 {
-                    @:Your number is too big
+                    @:Try between these numbers
                 }
             </p>
         }
@@ -36,16 +40,17 @@
     </div>
     <div class="outer-form-container">
         <div class="form-container">
-            <form action="Guess,{guess}" method="post">
+            <form action="/Guess/{guess1},{guess2}" method="post">
                 <p>Take a guess:</p>
-                <input disabled="@Model.SuccessfullyGuessed" type="number" name="guess" />
+                <input disabled="@Model.SuccessfullyGuessed" type="number" name="guess1" />
+                <input disabled="@Model.SuccessfullyGuessed" type="number" name="guess2" />
                 <input disabled="@Model.SuccessfullyGuessed" type="submit" value="Guess" />
             </form>
         </div>
         @if (Model.SuccessfullyGuessed)
         {
             <div class="form-container">
-                <form action="Game" method="get">
+                <form action="/Game" method="get">
                     <input type="submit" value="Play again"/>
                 </form>
             </div>

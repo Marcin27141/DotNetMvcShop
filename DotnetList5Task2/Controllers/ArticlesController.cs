@@ -15,7 +15,9 @@ namespace DotnetList5Task2.Controllers
         // GET: ArticlesController
         public ActionResult Index()
         {
-            return View(_articleRepository.GetAll());
+            var allArticles = _articleRepository.GetAll();
+            var pricesSum = allArticles.Sum(art => art.Price);
+            return View(new ArticlesList() { Articles = allArticles, PricesSum = pricesSum});
         }
 
         // GET: ArticlesController/Details/5

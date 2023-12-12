@@ -1,4 +1,5 @@
-﻿@model IEnumerable<DotnetList5Task2.Models.Shop.Article>
+﻿@model DotnetList5Task2.Models.Shop.ArticlesList
+
 
 @{
     ViewData["Title"] = "Index";
@@ -27,7 +28,7 @@
             <th></th>
         </tr>
 
-        @foreach (var article in Model)
+        @foreach (var article in Model.Articles)
         {
             <tr>
                 <td>
@@ -44,6 +45,9 @@
             </tr>
         }
     </table>
+</div>
+<div>
+    <p class="prices-sum" style="font-size: 20px; padding:10px;font-weight:bold">Prices sum: @(Model.PricesSum)$</p>
 </div>
 
 @section Scripts {

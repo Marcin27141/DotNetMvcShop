@@ -53,9 +53,10 @@
     </div>
 
     <div class="form-container">
-        <form action="Guess,{guess}" method="post">
+        <form action="/Guess/{guess1},{guess2}" method="post">
             <p>Take a first guess:</p>
-            <input type="number" name="guess" />
+            <input type="number" name="guess1" />
+            <input type="number" name="guess2" />
             <input type="submit" value="Guess" />
         </form>
     </div>

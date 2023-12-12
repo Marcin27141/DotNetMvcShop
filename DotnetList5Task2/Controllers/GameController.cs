@@ -41,17 +41,26 @@ namespace DotnetList5Task2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Route("Guess,{guess}")]
-        public IActionResult GuessNumber(int guess)
+        [Route("Guess/{guess1},{guess2}")]
+        public IActionResult GuessNumber(int guess1, int guess2)
         {
             _guessesTaken++;
             var model = new GameViewModel
             {
                 GuessesTaken = _guessesTaken,
-                SuccessfullyGuessed = guess == secretNumber,
-                MoreOrLess = Math.Sign(guess - secretNumber)
+                SuccessfullyGuessed = guess1 == secretNumber || guess2 == secretNumber,
+                MoreOrLess = GetMoreOrLess(guess1, guess2)
             };
             return View(model);
+        }
+
+        private int GetMoreOrLess(int guess1, int guess2)
+        {
+            if (guess1 < secretNumber && guess2 < secretNumber)
+                return -1;
+            else if (guess1 > secretNumber && guess2 > secretNumber)
+                return 1;
+            else return 0;
         }
     }
 }
