@@ -8,6 +8,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContextPool<ShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("en-EN");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

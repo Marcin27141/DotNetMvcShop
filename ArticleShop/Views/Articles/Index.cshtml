@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ArticleShop.Models.Database.Article>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/list_with_search.css" />
+}
+
+<div class="table-container">
+    <h1>Articles</h1>
+    <div class="upper-div">
+        <input type="search" id="searchbar" placeholder="Search.." name="query">
+        <p class="newLink">
+            <a asp-action="Create">Create a new article</a>
+        </p>
+    </div>
+    <table class="main-table" id="searchTable">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                ID
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var article in Model)
+        {
+            <tr>
+                <td>
+                    @article.Name
+                </td>
+                <td>
+                    @article.Id
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { article.Id }) |
+                    @Html.ActionLink("Details", "Details", new { article.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { article.Id })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/listWithSearch.js"></script>
+}

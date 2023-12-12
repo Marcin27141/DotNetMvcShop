@@ -1,0 +1,36 @@
+﻿@model ArticleShop.Models.ArticleWithAllCategories
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/form_styling.css" />
+}
+
+<div class="outer-form-container">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Article.Id" hidden class="form-control" />
+
+        @await Html.PartialAsync("_ArticleProperties", Model)
+
+        <div class="form-group">
+            <button type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
+
+@section return_link {
+    <div class="return-link">
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -16,6 +16,8 @@ namespace ArticleShop.Models.Database
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Seed();
+            modelBuilder.Entity<Article>().Navigation(a => a.Category).AutoInclude();
+
         }
     }
 

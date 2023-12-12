@@ -44,7 +44,6 @@ form {
 
 .outer-form-container select {
     width: 100%;
-    min-height: 100px;
 }
 
 .select-container select option:checked {
