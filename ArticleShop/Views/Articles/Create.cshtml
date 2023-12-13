@@ -1,4 +1,4 @@
-﻿@model ArticleShop.Models.ArticleWithAllCategories
+﻿@model ArticleShop.Models.FormArticle
 
 @{
     ViewData["Title"] = "Create";
@@ -9,7 +9,7 @@
 }
 
 <div class="outer-form-container">
-    <form asp-action="Create">
+    <form asp-action="Create" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         @await Html.PartialAsync("_ArticleProperties", Model)
