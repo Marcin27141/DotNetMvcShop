@@ -5,11 +5,14 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/single_result.css" />
+    <link rel="Stylesheet" href="~/css/single_result_v2.css" />
 }
 
 <div class="single-result">
     <h1>@Model.Name</h1>
+    <div class="image-div">
+        <img src="@Model.ImagePath" alt="@Model.Name image" />
+    </div>
     <div class="key-value-result">
         <h2>Name</h2>
         <h4>@Model.Name</h4>

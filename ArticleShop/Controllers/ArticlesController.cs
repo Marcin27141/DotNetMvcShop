@@ -23,7 +23,8 @@ namespace ArticleShop.Controllers
 
         public async Task<ActionResult> Details(Guid id)
         {
-            return View(await _context.Articles.FindAsync(id));
+            var article = await _context.Articles.FindAsync(id);
+            return View(article);
         }
 
         public ActionResult Create()

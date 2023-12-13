@@ -19,10 +19,16 @@
     <table class="main-table" id="searchTable">
         <tr>
             <th>
+                Photo
+            </th>
+            <th>
                 Name
             </th>
             <th>
-                ID
+                Price
+            </th>
+            <th>
+                Category
             </th>
             <th></th>
         </tr>
@@ -31,10 +37,16 @@
         {
             <tr>
                 <td>
+                    <img src="@article.ImagePath" height="80" width="80" alt="@article.Name image" />
+                </td>
+                <td>
                     @article.Name
                 </td>
                 <td>
-                    @article.Id
+                    @article.Price
+                </td>
+                <td>
+                    @article.Category.Name
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { article.Id }) |
@@ -45,6 +57,8 @@
         }
     </table>
 </div>
+
+
 
 @section Scripts {
     <script type="text/javascript" src="~/js/listWithSearch.js"></script>
