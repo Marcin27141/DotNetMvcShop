@@ -3,9 +3,14 @@
     var imagePath = Model.Article?.ImagePath ?? "/image/no_image.jpg";
 }
 
+<input asp-for="Article.Id" hidden class="form-control" />
+<input asp-for="Article.ImagePath" hidden class="form-control" />
+<input asp-for="DefaultImageSrc" hidden class="form-control" />
+
 <div class="form-group">
     <img src="@imagePath" id="preview" alt="Your image" />
     <input asp-for="FormFile" class="form-control custom-file-input" onchange="previewFile(event)" />
+    <p id="removeImage" onclick="removeImage()" style="cursor:pointer">Remove image</p>
 </div>
 <div class="form-group">
     <label asp-for="Article.Name" class="control-label"></label>
@@ -29,6 +34,11 @@
 </div>
 
 <script>
+    var removeImage = function () {
+        var image = document.getElementById('preview');
+        image.src = "@Model.DefaultImageSrc";
+    }
+
     var previewFile = function (event) {
         var reader = new FileReader();
         reader.onload = function () {

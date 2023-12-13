@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using NuGet.Packaging.Signing;
 
 namespace ArticleShop.Controllers
@@ -80,16 +81,20 @@ namespace ArticleShop.Controllers
         {
             var newImagePath = await WriteSelectedFile(collection);
 
-            Article article = new Article
+            var original = await _context.Articles.FindAsync(id);
+            if (newImagePath != original.ImagePath && original.ImagePath.Contains("upload"))
             {
-                Id = id,
-                Name = collection["Article.Name"],
-                Price = Convert.ToDecimal(collection["Article.Price"]),
-                ExpiryDate = DateOnly.Parse(collection["Article.ExpiryDate"]),
-                CategoryId = Guid.Parse(collection["Article.CategoryId"]),
-                ImagePath = newImagePath
-            };
-            _context.Update(article);
+                DeleteWebFile(original.ImagePath);
+                original.ImagePath = newImagePath;
+            }
+                
+            original.Name = collection["Article.Name"];
+            original.Price = Convert.ToDecimal(collection["Article.Price"]);
+            original.ExpiryDate = DateOnly.Parse(collection["Article.ExpiryDate"]);
+            original.CategoryId = Guid.Parse(collection["Article.CategoryId"]);
+            
+
+            _context.Update(original);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id });
         }
@@ -113,7 +118,14 @@ namespace ArticleShop.Controllers
                 var result = filePath.ToString().Replace("\\", "/");
                 return result.Substring(result.IndexOf("/upload"));
             }
-            else return "/image/no_image.jpg";
+            else return collection["DefaultImageSrc"];
+        }
+
+        private void DeleteWebFile(string filePath)
+        {
+            var fullPath = Path.Combine(_hostingEnvironment.WebRootPath, filePath.TrimStart('/'));
+            if (System.IO.File.Exists(fullPath))
+                System.IO.File.Delete(fullPath);
         }
 
         public async Task<ActionResult> Delete(Guid id)
@@ -125,8 +137,15 @@ namespace ArticleShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Guid id, IFormCollection collection)
         {
-            _context.Remove<Article>(await _context.Articles.FindAsync(id));
-            await _context.SaveChangesAsync();
+            var toDelete = await _context.Articles.FindAsync(id);
+            if (toDelete != null)
+            {
+                _context.Remove(toDelete);
+                if (toDelete.ImagePath.Contains("upload"))
+                    DeleteWebFile(toDelete.ImagePath);
+                await _context.SaveChangesAsync();
+            }
+            
             return RedirectToAction(nameof(Index));
         }
     }
