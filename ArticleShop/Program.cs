@@ -1,9 +1,12 @@
 using ArticleShop.Models.Database;
 using ArticleShop.Repositories.ArticleRepository;
 using ArticleShop.Repositories.CategoryRepository;
+using ArticleShop.Repositories.ImageRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IImageRepository, ImageRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -12,6 +15,7 @@ builder.Services.AddDbContextPool<ShopDbContext>(options =>
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+
 
 System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("en-EN");
 

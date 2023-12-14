@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ArticleShop.Repositories.ImageRepository;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace ArticleShop.Models.Database
@@ -48,13 +50,13 @@ namespace ArticleShop.Models.Database
                 Name = "Animals"
             }};
 
-        public static void Seed(this ModelBuilder modelBuilder)
+        public static void Seed(this ModelBuilder modelBuilder, IImageRepository imageRepository)
         {
             SeedCategories(modelBuilder);
-            SeedArticles(modelBuilder);
+            SeedArticles(modelBuilder, imageRepository);
         }
 
-        private static void SeedArticles(ModelBuilder modelBuilder)
+        private static void SeedArticles(ModelBuilder modelBuilder, IImageRepository imageRepository)
         {
             modelBuilder.Entity<Article>().HasData(
                 new Article()
@@ -62,6 +64,7 @@ namespace ArticleShop.Models.Database
                     Id = Guid.NewGuid(),
                     Name = "Chocolate bar",
                     Price = 2.34M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
                     ExpiryDate = new DateOnly(2023, 12, 20),
                     CategoryId = TryGetCategoryId("Food"),
                 },
@@ -70,6 +73,7 @@ namespace ArticleShop.Models.Database
                     Id = Guid.NewGuid(),
                     Name = "Bird cage",
                     Price = 47.29M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
                     ExpiryDate = new DateOnly(2033, 12, 20),
                     CategoryId = TryGetCategoryId("Animals")
                 },
@@ -78,6 +82,7 @@ namespace ArticleShop.Models.Database
                     Id = Guid.NewGuid(),
                     Name = "Flute coursebook",
                     Price = 10.00M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
                     ExpiryDate = new DateOnly(2034, 7, 7),
                     CategoryId = TryGetCategoryId("Music")
                 },
@@ -86,6 +91,7 @@ namespace ArticleShop.Models.Database
                     Id = Guid.NewGuid(),
                     Name = "Gloomhaven",
                     Price = 80.99M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
                     ExpiryDate = new DateOnly(2043, 1, 1),
                     CategoryId = TryGetCategoryId("Board Game")
                 });

@@ -2,6 +2,7 @@
 using ArticleShop.Models.Database;
 using ArticleShop.Repositories.ArticleRepository;
 using ArticleShop.Repositories.CategoryRepository;
+using ArticleShop.Repositories.ImageRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +17,17 @@ namespace ArticleShop.Controllers
     {
         private readonly IArticleRepository _articleRepository;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IImageRepository _imageRepository;
 
         public ArticlesController(
             IArticleRepository articleRepository,
             ICategoryRepository categoryRepository,
-            IWebHostEnvironment hostingEnvironment)
+            IImageRepository imageRepository
+            )
         {
             _articleRepository = articleRepository;
             _categoryRepository = categoryRepository;
-            _hostingEnvironment = hostingEnvironment;
+            _imageRepository = imageRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -43,13 +45,14 @@ namespace ArticleShop.Controllers
             return View(new FormArticle()
             {
                 Article = new Article(),
+                DefaultImageSrc = _imageRepository.GetDefaultImagePath(),
                 AvailableCategories = _categoryRepository.GetSelectListCategories()
             });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection/*IFormFileCollection files, [FromForm] Article article*/)
         {
             var newImagePath = await WriteSelectedFile(collection);
 
@@ -71,6 +74,7 @@ namespace ArticleShop.Controllers
             return View(new FormArticle()
             {
                 Article = await _articleRepository.GetByIdAsync(id),
+                DefaultImageSrc = _imageRepository.GetDefaultImagePath(),
                 AvailableCategories = _categoryRepository.GetSelectListCategories()
             });
         }
@@ -82,9 +86,9 @@ namespace ArticleShop.Controllers
             var newImagePath = await WriteSelectedFile(collection);
 
             var original = await _articleRepository.GetByIdAsync(id);
-            if (newImagePath != original.ImagePath && original.ImagePath.Contains("upload"))
+            if (newImagePath != original.ImagePath)
             {
-                DeleteWebFile(original.ImagePath);
+                _imageRepository.HandleLooseImage(original.ImagePath);
                 original.ImagePath = newImagePath;
             }
                 
@@ -101,30 +105,7 @@ namespace ArticleShop.Controllers
         private async Task<string> WriteSelectedFile(IFormCollection collection)
         {
             var file = collection.Files["FormFile"];
-            var filePath = collection["Article.ImagePath"];
-            if (file != null && file.Length > 0)
-            {
-                if (!filePath.Contains("upload"))
-                {
-                    string uploadsPath = Path.Combine(_hostingEnvironment.WebRootPath, "upload");
-                    filePath = Path.Combine(uploadsPath, Guid.NewGuid().ToString() + ".jpg");
-                }
-                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
-
-                var result = filePath.ToString().Replace("\\", "/");
-                return result.Substring(result.IndexOf("/upload"));
-            }
-            else return collection["DefaultImageSrc"];
-        }
-
-        private void DeleteWebFile(string filePath)
-        {
-            var fullPath = Path.Combine(_hostingEnvironment.WebRootPath, filePath.TrimStart('/'));
-            if (System.IO.File.Exists(fullPath))
-                System.IO.File.Delete(fullPath);
+            return await _imageRepository.GetWebImagePath(file);
         }
 
         public async Task<ActionResult> Delete(Guid id)
@@ -139,9 +120,8 @@ namespace ArticleShop.Controllers
             var toDelete = await _articleRepository.GetByIdAsync(id);
             if (toDelete != null)
             {
+                _imageRepository.HandleLooseImage(toDelete.ImagePath);
                 await _articleRepository.Remove(toDelete);
-                if (toDelete.ImagePath.Contains("upload"))
-                    DeleteWebFile(toDelete.ImagePath);
             }
             
             return RedirectToAction(nameof(Index));
