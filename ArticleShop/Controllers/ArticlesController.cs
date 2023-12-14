@@ -1,5 +1,7 @@
 ﻿using ArticleShop.Models;
 using ArticleShop.Models.Database;
+using ArticleShop.Repositories.ArticleRepository;
+using ArticleShop.Repositories.CategoryRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -12,24 +14,28 @@ namespace ArticleShop.Controllers
 {
     public class ArticlesController : Controller
     {
-        private readonly ShopDbContext _context;
+        private readonly IArticleRepository _articleRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ArticlesController(ShopDbContext context, IWebHostEnvironment hostingEnvironment)
+        public ArticlesController(
+            IArticleRepository articleRepository,
+            ICategoryRepository categoryRepository,
+            IWebHostEnvironment hostingEnvironment)
         {
-            _context = context;
+            _articleRepository = articleRepository;
+            _categoryRepository = categoryRepository;
             _hostingEnvironment = hostingEnvironment;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Articles.ToListAsync());
+            return View(await _articleRepository.GetAllAsync());
         }
 
         public async Task<ActionResult> Details(Guid id)
         {
-            var article = await _context.Articles.FindAsync(id);
-            return View(article);
+            return View(await _articleRepository.GetByIdAsync(id));
         }
 
         public ActionResult Create()
@@ -37,13 +43,8 @@ namespace ArticleShop.Controllers
             return View(new FormArticle()
             {
                 Article = new Article(),
-                AvailableCategories = GetSelectableCategories()
+                AvailableCategories = _categoryRepository.GetSelectListCategories()
             });
-        }
-
-        private IEnumerable<SelectListItem> GetSelectableCategories()
-        {
-            return _context.Categories.Select(cat => new SelectListItem() { Text = cat.Name, Value = cat.Id.ToString() });
         }
 
         [HttpPost]
@@ -61,8 +62,7 @@ namespace ArticleShop.Controllers
                 CategoryId = Guid.Parse(collection["Article.CategoryId"]),
                 ImagePath = newImagePath
             };
-            _context.Add(article);
-            await _context.SaveChangesAsync();
+            await _articleRepository.Add(article);
             return RedirectToAction(nameof(Index));
         }
 
@@ -70,8 +70,8 @@ namespace ArticleShop.Controllers
         {
             return View(new FormArticle()
             {
-                Article = await _context.Articles.FindAsync(id),
-                AvailableCategories = GetSelectableCategories()
+                Article = await _articleRepository.GetByIdAsync(id),
+                AvailableCategories = _categoryRepository.GetSelectListCategories()
             });
         }
 
@@ -81,7 +81,7 @@ namespace ArticleShop.Controllers
         {
             var newImagePath = await WriteSelectedFile(collection);
 
-            var original = await _context.Articles.FindAsync(id);
+            var original = await _articleRepository.GetByIdAsync(id);
             if (newImagePath != original.ImagePath && original.ImagePath.Contains("upload"))
             {
                 DeleteWebFile(original.ImagePath);
@@ -94,8 +94,7 @@ namespace ArticleShop.Controllers
             original.CategoryId = Guid.Parse(collection["Article.CategoryId"]);
             
 
-            _context.Update(original);
-            await _context.SaveChangesAsync();
+            await _articleRepository.Update(original);
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -130,20 +129,19 @@ namespace ArticleShop.Controllers
 
         public async Task<ActionResult> Delete(Guid id)
         {
-            return View(await _context.Articles.FindAsync(id));
+            return View(await _articleRepository.GetByIdAsync(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Guid id, IFormCollection collection)
         {
-            var toDelete = await _context.Articles.FindAsync(id);
+            var toDelete = await _articleRepository.GetByIdAsync(id);
             if (toDelete != null)
             {
-                _context.Remove(toDelete);
+                await _articleRepository.Remove(toDelete);
                 if (toDelete.ImagePath.Contains("upload"))
                     DeleteWebFile(toDelete.ImagePath);
-                await _context.SaveChangesAsync();
             }
             
             return RedirectToAction(nameof(Index));
