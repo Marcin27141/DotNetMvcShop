@@ -3,13 +3,7 @@ using ArticleShop.Models.Database;
 using ArticleShop.Repositories.ArticleRepository;
 using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using NuGet.Packaging.Signing;
 
 namespace ArticleShop.Controllers
 {
@@ -37,7 +31,9 @@ namespace ArticleShop.Controllers
 
         public async Task<ActionResult> Details(Guid id)
         {
-            return View(await _articleRepository.GetByIdAsync(id));
+            var article = await _articleRepository.GetByIdAsync(id);
+            return article is null ? NotFound() : View(article);
+
         }
 
         public ActionResult Create()
@@ -52,65 +48,51 @@ namespace ArticleShop.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection/*IFormFileCollection files, [FromForm] Article article*/)
+        public async Task<ActionResult> Create([FromForm] FormArticle formArticle)
         {
-            var newImagePath = await WriteSelectedFile(collection);
+            var article = formArticle.Article;
 
-            Article article = new Article
-            {
-                Id = Guid.NewGuid(),
-                Name = collection["Article.Name"],
-                Price = Convert.ToDecimal(collection["Article.Price"]),
-                ExpiryDate = DateOnly.Parse(collection["Article.ExpiryDate"]),
-                CategoryId = Guid.Parse(collection["Article.CategoryId"]),
-                ImagePath = newImagePath
-            };
+            article.Id = Guid.NewGuid();
+            article.ImagePath = await _imageRepository.GetWebImagePath(formArticle.FormFile);
+
             await _articleRepository.Add(article);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> Edit(Guid id)
         {
-            return View(new FormArticle()
-            {
-                Article = await _articleRepository.GetByIdAsync(id),
-                DefaultImageSrc = _imageRepository.GetDefaultImagePath(),
-                AvailableCategories = _categoryRepository.GetSelectListCategories()
-            });
+            var article = await _articleRepository.GetByIdAsync(id);
+            return article is null ? NotFound() :
+                View(new FormArticle()
+                {
+                    Article = article,
+                    DefaultImageSrc = _imageRepository.GetDefaultImagePath(),
+                    AvailableCategories = _categoryRepository.GetSelectListCategories()
+                });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Guid id, [FromForm] FormArticle formArticle)
         {
-            var newImagePath = await WriteSelectedFile(collection);
+            var newImagePath = await _imageRepository.GetWebImagePath(formArticle.FormFile);
+            var updatedArticle = formArticle.Article;
+            updatedArticle.Id = id;
 
-            var original = await _articleRepository.GetByIdAsync(id);
-            if (newImagePath != original.ImagePath)
+            if (updatedArticle.ImagePath != newImagePath)
             {
-                _imageRepository.HandleLooseImage(original.ImagePath);
-                original.ImagePath = newImagePath;
-            }
-                
-            original.Name = collection["Article.Name"];
-            original.Price = Convert.ToDecimal(collection["Article.Price"]);
-            original.ExpiryDate = DateOnly.Parse(collection["Article.ExpiryDate"]);
-            original.CategoryId = Guid.Parse(collection["Article.CategoryId"]);
-            
+                _imageRepository.HandleLooseImage(updatedArticle.ImagePath);
+                updatedArticle.ImagePath = newImagePath;
+            }            
 
-            await _articleRepository.Update(original);
+            await _articleRepository.Update(updatedArticle);
             return RedirectToAction(nameof(Details), new { id });
-        }
-
-        private async Task<string> WriteSelectedFile(IFormCollection collection)
-        {
-            var file = collection.Files["FormFile"];
-            return await _imageRepository.GetWebImagePath(file);
         }
 
         public async Task<ActionResult> Delete(Guid id)
         {
-            return View(await _articleRepository.GetByIdAsync(id));
+            var article = await _articleRepository.GetByIdAsync(id);
+            return article is null ? NotFound() : View(article);
         }
 
         [HttpPost]

@@ -22,7 +22,8 @@ namespace ArticleShop.Controllers
 
         public async Task<ActionResult> Details(Guid id)
         {
-            return View(await _categoryRepository.GetByIdAsync(id));
+            var category = await _categoryRepository.GetByIdAsync(id);
+            return category is null ? NotFound() : View(category);
         }
 
         public ActionResult Create()
@@ -33,13 +34,9 @@ namespace ArticleShop.Controllers
         // POST: CategoriesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create([FromForm] Category category)
         {
-            Category category = new Category()
-            {
-                Id = Guid.NewGuid(),
-                Name = collection["Name"]
-            };
+            category.Id = Guid.NewGuid();
             await _categoryRepository.Add(category);
             return RedirectToAction(nameof(Index));
         }
@@ -47,19 +44,16 @@ namespace ArticleShop.Controllers
         // GET: CategoriesController/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
-            return View(await _categoryRepository.GetByIdAsync(id));
+            var category = await _categoryRepository.GetByIdAsync(id);
+            return category is null ? NotFound() : View(category);
         }
 
         // POST: CategoriesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Guid id, [FromForm] Category category)
         {
-            Category category = new Category()
-            {
-                Id = id,
-                Name = collection["Name"]
-            };
+            category.Id = id;
             await _categoryRepository.Update(category);
             return RedirectToAction(nameof(Details), new { id });
         }
@@ -67,7 +61,8 @@ namespace ArticleShop.Controllers
         // GET: CategoriesController/Delete/5
         public async Task<ActionResult> Delete(Guid id)
         {
-            return View(await _categoryRepository.GetByIdAsync(id));
+            var category = await _categoryRepository.GetByIdAsync(id);
+            return category is null ? NotFound() : View(category);
         }
 
         // POST: CategoriesController/Delete/5

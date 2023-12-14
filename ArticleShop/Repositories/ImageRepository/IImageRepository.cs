@@ -4,6 +4,6 @@
     {
         void HandleLooseImage(string imagePath);
         string GetDefaultImagePath();
-        Task<string> GetWebImagePath(IFormFile file);
+        Task<string> GetWebImagePath(IFormFile? file);
     }
 }

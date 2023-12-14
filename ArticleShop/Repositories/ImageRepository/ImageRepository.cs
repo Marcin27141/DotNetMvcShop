@@ -14,7 +14,7 @@ namespace ArticleShop.Repositories.ImageRepository
             _hostingEnvironment = hostingEnvironment;
         }
 
-        public async Task<string> GetWebImagePath(IFormFile file)
+        public async Task<string> GetWebImagePath(IFormFile? file)
         {
             return (file != null && file.Length > 0) ?
                 await CreateOrReplaceImage(file) :
