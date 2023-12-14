@@ -38,22 +38,18 @@ namespace ArticleShop.Controllers
 
         public ActionResult Create()
         {
-            return View(new FormArticle()
+            return View(new FormArticle(new Article(), _imageRepository.GetDefaultImagePath())
             {
-                Article = new Article(),
-                DefaultImageSrc = _imageRepository.GetDefaultImagePath(),
                 AvailableCategories = _categoryRepository.GetSelectListCategories()
-            });
+        });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([FromForm] FormArticle formArticle)
+        public async Task<ActionResult> Create([FromForm] FormArticle article)
         {
-            var article = formArticle.Article;
-
             article.Id = Guid.NewGuid();
-            article.ImagePath = await _imageRepository.GetWebImagePath(formArticle.FormFile);
+            article.ImagePath = await _imageRepository.GetWebImagePath(article.FormFile);
 
             await _articleRepository.Add(article);
             return RedirectToAction(nameof(Index));
@@ -63,20 +59,17 @@ namespace ArticleShop.Controllers
         {
             var article = await _articleRepository.GetByIdAsync(id);
             return article is null ? NotFound() :
-                View(new FormArticle()
+                View(new FormArticle(article, _imageRepository.GetDefaultImagePath())
                 {
-                    Article = article,
-                    DefaultImageSrc = _imageRepository.GetDefaultImagePath(),
                     AvailableCategories = _categoryRepository.GetSelectListCategories()
                 });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, [FromForm] FormArticle formArticle)
+        public async Task<ActionResult> Edit(Guid id, [FromForm] FormArticle updatedArticle)
         {
-            var newImagePath = await _imageRepository.GetWebImagePath(formArticle.FormFile);
-            var updatedArticle = formArticle.Article;
+            var newImagePath = await _imageRepository.GetWebImagePath(updatedArticle.FormFile);
             updatedArticle.Id = id;
 
             if (updatedArticle.ImagePath != newImagePath)

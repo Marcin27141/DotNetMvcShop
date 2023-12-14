@@ -32,7 +32,7 @@ namespace ArticleShop.Repositories.CategoryRepository
 
         public IEnumerable<SelectListItem> GetSelectListCategories()
         {
-            return _context.Categories.Select(cat => new SelectListItem() { Text = cat.Name, Value = cat.Id.ToString() });
+            return _context.Categories.Select(cat => new SelectListItem() { Text = cat.Name, Value = cat.Id.ToString() }).OrderBy(cat => cat.Text);
         }
 
         public async Task<bool> Remove(Guid id)
