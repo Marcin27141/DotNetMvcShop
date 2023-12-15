@@ -1,18 +1,22 @@
 ﻿using ArticleShop.Models.Database;
+using ArticleShop.Repositories.ArticleCleanUp;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using System.Runtime.CompilerServices;
 
 namespace ArticleShop.Repositories.CategoryRepository
 {
     public class CategoryRepository : ICategoryRepository
     {
+        private const string MOST_GENERAL_CATEGORY = "Others";
         private readonly ShopDbContext _context;
+        private readonly IArticleCleanUp _articleCleanUp;
 
-        public CategoryRepository(ShopDbContext context)
+        public CategoryRepository(
+            ShopDbContext context,
+            IArticleCleanUp articleCleanUp)
         {
-            this._context = context;
+            _context = context;
+            _articleCleanUp = articleCleanUp;
         }
         public async Task Add(Category category)
         {
@@ -40,6 +44,9 @@ namespace ArticleShop.Repositories.CategoryRepository
             var toRemove = await GetByIdAsync(id);
             if (toRemove != null)
             {
+                var mostGeneralCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Name.Equals(MOST_GENERAL_CATEGORY));
+                await _articleCleanUp.HandleCategoryDeleted(toRemove, mostGeneralCategory);
+
                 await Remove(toRemove);
                 return true;
             }

@@ -1,4 +1,5 @@
 ﻿using ArticleShop.Models.Database;
+using ArticleShop.Repositories.ArticleCleanUp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using System.Runtime.CompilerServices;
@@ -8,10 +9,12 @@ namespace ArticleShop.Repositories.ArticleRepository
     public class ArticleRepository : IArticleRepository
     {
         private readonly ShopDbContext _context;
+        private readonly IArticleCleanUp _articleCleanUp;
 
-        public ArticleRepository(ShopDbContext context)
+        public ArticleRepository(ShopDbContext context, IArticleCleanUp articleCleanUp)
         {
-            this._context = context;
+            _context = context;
+            _articleCleanUp = articleCleanUp;
         }
         public async Task Add(Article article)
         {
@@ -42,6 +45,7 @@ namespace ArticleShop.Repositories.ArticleRepository
 
         public async Task Remove(Article article)
         {
+            await _articleCleanUp.HandleDeletedArticleImage(article.ImagePath);
             _context.Remove(article);
             await _context.SaveChangesAsync();
         }

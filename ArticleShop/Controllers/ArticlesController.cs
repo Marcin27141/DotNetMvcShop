@@ -94,11 +94,8 @@ namespace ArticleShop.Controllers
         {
             var toDelete = await _articleRepository.GetByIdAsync(id);
             if (toDelete != null)
-            {
-                _imageRepository.HandleLooseImage(toDelete.ImagePath);
                 await _articleRepository.Remove(toDelete);
-            }
-            
+
             return RedirectToAction(nameof(Index));
         }
     }

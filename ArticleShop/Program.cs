@@ -1,4 +1,5 @@
 using ArticleShop.Models.Database;
+using ArticleShop.Repositories.ArticleCleanUp;
 using ArticleShop.Repositories.ArticleRepository;
 using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
@@ -13,8 +14,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContextPool<ShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddScoped<IArticleCleanUp, ArticleCleanUp>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+
 
 
 System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("en-EN");
