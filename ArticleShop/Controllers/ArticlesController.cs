@@ -4,6 +4,7 @@ using ArticleShop.Repositories.ArticleRepository;
 using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ArticleShop.Controllers
 {
@@ -24,9 +25,18 @@ namespace ArticleShop.Controllers
             _imageRepository = imageRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchValue)
         {
-            return View(await _articleRepository.GetAllAsync());
+            return View(
+                searchValue == null ? await _articleRepository.GetAllAsync() : await GetFilteredArticles(searchValue)
+                );
+        }
+
+        private async Task<IEnumerable<Article>> GetFilteredArticles(string searchValue)
+        {
+            var articles = await _articleRepository.GetAllAsync();
+            var lowerSearch = searchValue.ToLower();
+            return articles.Where(a => a.Name.ToLower().Contains(lowerSearch) || a.Category.Name.ToLower().Contains(lowerSearch));
         }
 
         public async Task<ActionResult> Details(Guid id)
@@ -97,6 +107,12 @@ namespace ArticleShop.Controllers
                 await _articleRepository.Remove(toDelete);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Search(string searchValue)
+        {
+            return RedirectToAction(nameof(Index), new { searchValue });
         }
     }
 }

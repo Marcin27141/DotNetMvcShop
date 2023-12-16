@@ -5,12 +5,18 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/list_with_search.css" />
+    <link rel="Stylesheet" href="~/css/grid_with_search_v2.css" />
 }
 
 <div class="table-container">
     <h1>Articles</h1>
     <div class="upper-div">
+        <form asp-action="Search" method="get">
+            <input type="search" id="searchbar" placeholder="Search.." name="searchValue">
+            <input type="submit" value="Search"/>
+        </form>
+        
+        
         <p class="newLink">
             <a asp-action="Create">Create a new article</a>
         </p>
