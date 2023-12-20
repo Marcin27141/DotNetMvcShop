@@ -5,7 +5,7 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/grid_with_search_v2.css" />
+    <link rel="Stylesheet" href="~/css/shop_list_styling_v2.css" />
 }
 
 <div class="table-container">
@@ -37,6 +37,7 @@
             <th>
                 Expires
             </th>
+            <th></th>
         </tr>
 
         @foreach (var article in Model.Articles)
@@ -56,6 +57,32 @@
                 </td>
                 <td>
                     @article.ExpiryDate
+                </td>
+                <td>
+                    <div class="add-remove-buttons">
+                        <form asp-action="AddToCart" method="post">
+                            <input type="hidden" name="articleId" value="@article.Id" />
+                            <button type="submit" class="add-to-cart-button">
+                                Add to cart
+                            </button>
+                        </form>
+                        @if (TempData.ContainsKey(article.Id.ToString()))
+                        {
+                            <form asp-action="RemoveFromCart" method="post">
+                                <input type="hidden" name="articleId" value="@article.Id" />
+                                <button type="submit" class="remove-from-cart-button">
+                                    Remove from cart
+                                </button>
+                            </form>
+                        }
+                    </div>
+                    
+                    @if (TempData.ContainsKey(article.Id.ToString()))
+                    {
+                        <div class="items-in-cart">
+                            Items in cart: @TempData.Peek(article.Id.ToString())
+                        </div>
+                    }
                 </td>
             </tr>
         }

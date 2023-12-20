@@ -6,6 +6,7 @@ using ArticleShop.Repositories.ImageRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Buffers;
+using System.Collections.Generic;
 
 namespace ArticleShop.Controllers
 {
@@ -59,6 +60,52 @@ namespace ArticleShop.Controllers
             await GetCategoriesWithAllOption()
             );
             return View(nameof(Index), model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddToCart(Guid articleId)
+        {
+            var existing = Request.Cookies[articleId.ToString()];
+            var numberOfItems = 1;
+            if (existing != null)
+            {
+                numberOfItems = int.Parse(existing);
+                numberOfItems++;
+            }
+            SetCookie(articleId.ToString(), numberOfItems.ToString(), 60 * 60 * 24 * 7);
+            TempData[articleId.ToString()] = numberOfItems;
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveFromCart(Guid articleId)
+        {
+            var existing = Request.Cookies[articleId.ToString()];
+            if (existing != null)
+            {
+                var numberOfItems = int.Parse(existing);
+                if (numberOfItems > 1)
+                {
+                    SetCookie(articleId.ToString(), (numberOfItems - 1).ToString(), 60 * 60 * 24 * 7);
+                    TempData[articleId.ToString()] = (numberOfItems - 1);
+                }
+                else
+                {
+                    Response.Cookies.Delete(articleId.ToString());
+                    TempData.Remove(articleId.ToString());
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        private void SetCookie(string key, string value, int? numberOfSeconds = null)
+        {
+            CookieOptions option = new CookieOptions();
+            if (numberOfSeconds.HasValue)
+                option.Expires = DateTime.Now.AddSeconds(numberOfSeconds.Value);
+            Response.Cookies.Append(key, value, option);
         }
     }
 }
