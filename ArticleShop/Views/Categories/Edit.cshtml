@@ -19,6 +19,12 @@
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
+        <div class="form-group checkbox-group">
+            <label asp-for="IsPromo"></label>
+            <input asp-for="IsPromo" style="height:20px;width:20px" />
+            <span asp-validation-for="IsPromo"></span>
+        </div>
+
         <div class="form-group">
             <button type="submit">
                 Submit
