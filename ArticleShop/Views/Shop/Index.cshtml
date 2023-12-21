@@ -5,7 +5,7 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/shop_list_styling_v2.css" />
+    <link rel="Stylesheet" href="~/css/shop_list_styling_v3.css" />
 }
 
 <div class="table-container">
@@ -59,30 +59,25 @@
                     @article.ExpiryDate
                 </td>
                 <td>
+                    @{
+                        var quantity = TempData.Peek(article.Id.ToString());
+                        bool isDisabled = quantity is null;
+                    }
                     <div class="add-remove-buttons">
-                        <form asp-action="AddToCart" method="post">
+                        <form asp-action="RemoveFromCart" method="get">
                             <input type="hidden" name="articleId" value="@article.Id" />
-                            <button type="submit" class="add-to-cart-button">
-                                Add to cart
+                            <button type="submit" @(isDisabled ? "disabled" : "") class="remove-from-cart-button">
+                                -
                             </button>
                         </form>
-                        @if (TempData.ContainsKey(article.Id.ToString()))
-                        {
-                            <form asp-action="RemoveFromCart" method="post">
-                                <input type="hidden" name="articleId" value="@article.Id" />
-                                <button type="submit" class="remove-from-cart-button">
-                                    Remove from cart
-                                </button>
-                            </form>
-                        }
+                        <p>@(quantity ?? 0)</p>
+                        <form asp-action="AddToCart" method="get">
+                            <input type="hidden" name="articleId" value="@article.Id" />
+                            <button type="submit" class="add-to-cart-button">
+                                +
+                            </button>
+                        </form>
                     </div>
-                    
-                    @if (TempData.ContainsKey(article.Id.ToString()))
-                    {
-                        <div class="items-in-cart">
-                            Items in cart: @TempData.Peek(article.Id.ToString())
-                        </div>
-                    }
                 </td>
             </tr>
         }

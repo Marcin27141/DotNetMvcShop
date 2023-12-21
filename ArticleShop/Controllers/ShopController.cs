@@ -30,11 +30,24 @@ namespace ArticleShop.Controllers
 
         public async Task<IActionResult> Index(string? searchValue)
         {
+            await SetUpTempData();
             IEnumerable<SelectListItem> categories = await GetCategoriesWithAllOption();
             return View(new ShopViewModel(
                 searchValue == null ? await _articleRepository.GetAllAsync() : await GetFilteredArticles(searchValue),
                 categories
                 ));
+        }
+
+        private async Task SetUpTempData()
+        {
+            if (!TempData.Any(kvp => Guid.TryParse(kvp.Key, out Guid result)))
+            {
+                var cartArticles = await _cartRepository.GetArticlesInCartAsync(HttpContext);
+                foreach (var (article, quantity) in cartArticles)
+                {
+                    TempData[article.Id.ToString()] = quantity;
+                }
+            }
         }
 
         private async Task<IEnumerable<Article>> GetFilteredArticles(string searchValue)
@@ -69,8 +82,7 @@ namespace ArticleShop.Controllers
             return View(nameof(Index), model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public ActionResult AddToCart(Guid articleId)
         {
             var quantity = _cartRepository.AddToCart(HttpContext, articleId);
@@ -78,8 +90,7 @@ namespace ArticleShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public ActionResult RemoveFromCart(Guid articleId)
         {
             int remaining = _cartRepository.RemoveFromCart(HttpContext, articleId);
@@ -89,16 +100,5 @@ namespace ArticleShop.Controllers
                 TempData.Remove(articleId.ToString());
             return RedirectToAction(nameof(Index));
         }
-
-        public async Task<ActionResult> Cart()
-        {
-            var cartArticles = await _cartRepository.GetArticlesInCartAsync(HttpContext);
-            return View(new CartViewModel(cartArticles.Select(kvp => new CartArticle(kvp.Key, kvp.Value))));
-        }
-
-        
-
-
-        
     }
 }

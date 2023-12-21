@@ -56,16 +56,16 @@
                     <td>
                         
                         <div class="items-in-cart">
-                            <form asp-action="AddToCart" method="post">
+                            <form asp-action="RemoveFromCart" method="get">
                                 <input type="hidden" name="articleId" value="@article.Id" />
-                                <button type="submit" class="add-to-cart-button">
+                                <button type="submit" class="remove-from-cart-button">
                                     -
                                 </button>
                             </form>
                             <p>@cartArticle.Quantity</p>
-                            <form asp-action="RemoveFromCart" method="post">
+                            <form asp-action="AddToCart" method="get">
                                 <input type="hidden" name="articleId" value="@article.Id" />
-                                <button type="submit" class="remove-from-cart-button">
+                                <button type="submit" class="add-to-cart-button">
                                     +
                                 </button>
                             </form>
