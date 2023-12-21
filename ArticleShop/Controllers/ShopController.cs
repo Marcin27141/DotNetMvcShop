@@ -1,6 +1,7 @@
 ﻿using ArticleShop.Models;
 using ArticleShop.Models.Database;
 using ArticleShop.Repositories.ArticleRepository;
+using ArticleShop.Repositories.CartRepository;
 using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,16 @@ namespace ArticleShop.Controllers
     {
         private readonly IArticleRepository _articleRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICartRepository _cartRepository;
 
-        public ShopController(IArticleRepository articleRepository, ICategoryRepository categoryRepository)
+        public ShopController(
+            IArticleRepository articleRepository,
+            ICategoryRepository categoryRepository,
+            ICartRepository cartRepository)
         {
             _articleRepository = articleRepository;
             _categoryRepository = categoryRepository;
+            _cartRepository = cartRepository;
         }
 
         public async Task<IActionResult> Index(string? searchValue)
@@ -67,15 +73,8 @@ namespace ArticleShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddToCart(Guid articleId)
         {
-            var existing = Request.Cookies[articleId.ToString()];
-            var numberOfItems = 1;
-            if (existing != null)
-            {
-                numberOfItems = int.Parse(existing);
-                numberOfItems++;
-            }
-            SetCookie(articleId.ToString(), numberOfItems.ToString(), 60 * 60 * 24 * 7);
-            TempData[articleId.ToString()] = numberOfItems;
+            var quantity = _cartRepository.AddToCart(HttpContext, articleId);
+            TempData[articleId.ToString()] = quantity;
             return RedirectToAction(nameof(Index));
         }
 
@@ -83,54 +82,23 @@ namespace ArticleShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RemoveFromCart(Guid articleId)
         {
-            var existing = Request.Cookies[articleId.ToString()];
-            if (existing != null)
-            {
-                var numberOfItems = int.Parse(existing);
-                if (numberOfItems > 1)
-                {
-                    SetCookie(articleId.ToString(), (numberOfItems - 1).ToString(), 60 * 60 * 24 * 7);
-                    TempData[articleId.ToString()] = (numberOfItems - 1);
-                }
-                else
-                {
-                    Response.Cookies.Delete(articleId.ToString());
-                    TempData.Remove(articleId.ToString());
-                }
-            }
+            int remaining = _cartRepository.RemoveFromCart(HttpContext, articleId);
+            if (remaining > 0)
+                TempData[articleId.ToString()] = remaining;
+            else
+                TempData.Remove(articleId.ToString());
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<ActionResult> Cart()
         {
-            var cartArticles = new List<CartArticle>();
-            var cookies = Request.Cookies;
-
-            if (cookies != null && cookies.Count > 0)
-            {         
-                foreach (var cookie in cookies)
-                {
-                    var article = await TryGetArticleFromCookie(cookie.Key);
-                    if (article != null && int.TryParse(cookie.Value, out int quantity))
-                        cartArticles.Add(new CartArticle(article, quantity));
-                }
-            }
-            return View(new CartViewModel(cartArticles));
+            var cartArticles = await _cartRepository.GetArticlesInCartAsync(HttpContext);
+            return View(new CartViewModel(cartArticles.Select(kvp => new CartArticle(kvp.Key, kvp.Value))));
         }
 
-        private async Task<Article?> TryGetArticleFromCookie(string cookie)
-        {
-            var isGuid = Guid.TryParse(cookie, out Guid guid);
-            return !isGuid ? null : await _articleRepository.GetByIdAsync(guid);
-        }
+        
 
 
-        private void SetCookie(string key, string value, int? numberOfSeconds = null)
-        {
-            CookieOptions option = new CookieOptions();
-            if (numberOfSeconds.HasValue)
-                option.Expires = DateTime.Now.AddSeconds(numberOfSeconds.Value);
-            Response.Cookies.Append(key, value, option);
-        }
+        
     }
 }

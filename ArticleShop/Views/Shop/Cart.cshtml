@@ -5,7 +5,7 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/shop_list_styling_v2.css" />
+    <link rel="Stylesheet" href="~/css/shop_cart_styling.css" />
 }
 
 @if (Model.CartArticles.Count() > 0)
@@ -54,9 +54,23 @@
                         @article.ExpiryDate
                     </td>
                     <td>
+                        
                         <div class="items-in-cart">
-                            Items in cart: @cartArticle.Quantity
+                            <form asp-action="AddToCart" method="post">
+                                <input type="hidden" name="articleId" value="@article.Id" />
+                                <button type="submit" class="add-to-cart-button">
+                                    -
+                                </button>
+                            </form>
+                            <p>@cartArticle.Quantity</p>
+                            <form asp-action="RemoveFromCart" method="post">
+                                <input type="hidden" name="articleId" value="@article.Id" />
+                                <button type="submit" class="remove-from-cart-button">
+                                    +
+                                </button>
+                            </form>
                         </div>
+                        
                     </td>
                 </tr>
             }

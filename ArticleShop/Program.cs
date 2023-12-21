@@ -1,6 +1,7 @@
 using ArticleShop.Models.Database;
 using ArticleShop.Repositories.ArticleCleanUp;
 using ArticleShop.Repositories.ArticleRepository;
+using ArticleShop.Repositories.CartRepository;
 using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ builder.Services.AddDbContextPool<ShopDbContext>(options =>
 builder.Services.AddScoped<IArticleCleanUp, ArticleCleanUp>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 
 
