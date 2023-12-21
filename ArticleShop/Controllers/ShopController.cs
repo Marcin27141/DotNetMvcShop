@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Buffers;
 using System.Collections.Generic;
+using static ArticleShop.Models.CartViewModel;
 
 namespace ArticleShop.Controllers
 {
@@ -99,6 +100,30 @@ namespace ArticleShop.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<ActionResult> Cart()
+        {
+            var cartArticles = new List<CartArticle>();
+            var cookies = Request.Cookies;
+
+            if (cookies != null && cookies.Count > 0)
+            {         
+                foreach (var cookie in cookies)
+                {
+                    var article = await TryGetArticleFromCookie(cookie.Key);
+                    if (article != null && int.TryParse(cookie.Value, out int quantity))
+                        cartArticles.Add(new CartArticle(article, quantity));
+                }
+            }
+            return View(new CartViewModel(cartArticles));
+        }
+
+        private async Task<Article?> TryGetArticleFromCookie(string cookie)
+        {
+            var isGuid = Guid.TryParse(cookie, out Guid guid);
+            return !isGuid ? null : await _articleRepository.GetByIdAsync(guid);
+        }
+
 
         private void SetCookie(string key, string value, int? numberOfSeconds = null)
         {

@@ -1,0 +1,70 @@
+﻿@model ArticleShop.Models.CartViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/shop_list_styling_v2.css" />
+}
+
+@if (Model.CartArticles.Count() > 0)
+{
+    <div class="table-container">
+        <h1>Articles</h1>
+        <table class="main-table">
+            <tr>
+                <th>
+                    Photo
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Category
+                </th>
+                <th>
+                    Expires
+                </th>
+                <th>
+                    Quantity
+                </th>
+            </tr>
+
+            @foreach (var cartArticle in Model.CartArticles)
+            {
+                var article = cartArticle.Article;
+                <tr>
+                    <td>
+                        <img src="@article.ImagePath" height="80" width="80" alt="@article.Name image" />
+                    </td>
+                    <td>
+                        @article.Name
+                    </td>
+                    <td>
+                        @article.Price
+                    </td>
+                    <td>
+                        @article.Category.Name
+                    </td>
+                    <td>
+                        @article.ExpiryDate
+                    </td>
+                    <td>
+                        <div class="items-in-cart">
+                            Items in cart: @cartArticle.Quantity
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+        <h2>Total cost: @Model.CartArticles.Sum(a => a.Article.Price * a.Quantity)</h2>
+    </div>
+} else
+{
+    <h1>Your shopping cart is empty</h1>
+}
+
