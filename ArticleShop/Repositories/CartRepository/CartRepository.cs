@@ -84,5 +84,12 @@ namespace ArticleShop.Repositories.CartRepository
             }
             return 0;
         }
+
+        public void RemoveAllFromCart(HttpContext context, Guid id)
+        {
+            var existing = context.Request.Cookies[id.ToString()];
+            if (existing != null)
+                context.Response.Cookies.Delete(id.ToString());
+        }
     }
 }

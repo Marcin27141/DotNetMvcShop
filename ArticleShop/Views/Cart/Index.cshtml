@@ -5,7 +5,7 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/shop_cart_styling.css" />
+    <link rel="Stylesheet" href="~/css/shop_cart_styling_v2.css" />
 }
 
 @if (Model.CartArticles.Count() > 0)
@@ -54,23 +54,31 @@
                         @article.ExpiryDate
                     </td>
                     <td>
-                        
-                        <div class="items-in-cart">
-                            <form asp-action="RemoveFromCart" method="get">
-                                <input type="hidden" name="articleId" value="@article.Id" />
-                                <button type="submit" class="remove-from-cart-button">
-                                    -
-                                </button>
-                            </form>
-                            <p>@cartArticle.Quantity</p>
-                            <form asp-action="AddToCart" method="get">
-                                <input type="hidden" name="articleId" value="@article.Id" />
-                                <button type="submit" class="add-to-cart-button">
-                                    +
-                                </button>
-                            </form>
+                        <div class="cart-div">
+                            <div class="items-in-cart">
+                                <form asp-action="RemoveFromCart" method="get">
+                                    <input type="hidden" name="articleId" value="@article.Id" />
+                                    <button type="submit" class="remove-from-cart-button">
+                                        -
+                                    </button>
+                                </form>
+                                <p>@cartArticle.Quantity</p>
+                                <form asp-action="AddToCart" method="get">
+                                    <input type="hidden" name="articleId" value="@article.Id" />
+                                    <button type="submit" class="add-to-cart-button">
+                                        +
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="remove-all">
+                                <form asp-action="RemoveAllFromCart" method="get">
+                                    <input type="hidden" name="articleId" value="@article.Id" />
+                                    <button type="submit" class="remove-all-button">
+                                        Remove All
+                                    </button>
+                                </form>
+                            </div>                            
                         </div>
-                        
                     </td>
                 </tr>
             }

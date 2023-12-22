@@ -24,7 +24,7 @@ namespace ArticleShop.Controllers
         public async Task<ActionResult> Index()
         {
             var cartArticles = await _cartRepository.GetArticlesInCartAsync(HttpContext);
-            return View(new CartViewModel(cartArticles.Select(kvp => new CartArticle(kvp.Key, kvp.Value))));
+            return View(new CartViewModel(cartArticles.Select(kvp => new CartArticle(kvp.Key, kvp.Value)).OrderBy(c => c.Article.Name)));
         }
 
         public ActionResult AddToCart(Guid articleId)
@@ -41,6 +41,13 @@ namespace ArticleShop.Controllers
                 TempData[articleId.ToString()] = remaining;
             else
                 TempData.Remove(articleId.ToString());
+            return RedirectToAction(nameof(Index));
+        }
+
+        public ActionResult RemoveAllFromCart(Guid articleId)
+        {
+            _cartRepository.RemoveAllFromCart(HttpContext, articleId);
+            TempData.Remove(articleId.ToString());
             return RedirectToAction(nameof(Index));
         }
     }

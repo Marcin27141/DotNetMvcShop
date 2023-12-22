@@ -12,5 +12,7 @@ namespace ArticleShop.Repositories.CartRepository
         int AddToCart(HttpContext context, Guid articleId);
         int GetQuantityInCart(HttpContext context, Guid articleId);
         int RemoveFromCart(HttpContext context, Guid id);
+
+        void RemoveAllFromCart(HttpContext context, Guid id);
     }
 }

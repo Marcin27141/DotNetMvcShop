@@ -78,39 +78,11 @@
                             </button>
                         </form>
                     </div>
+                    @{
+                        TempData.Keep(article.Id.ToString());
+                    }
                 </td>
             </tr>
         }
     </table>
 </div>
-
-
-
-@* @section Scripts {
-    <script>
-        window.onload = function () {
-            let categories = document.getElementById('searchedCategory');
-            let articlesWithCategories = document.getElementById("searchTable");
-            let articleRows = articlesWithCategories.getElementsByTagName("tr");
-
-            categories.onchange = function () {
-                console.log(categories.value.toLowerCase());
-                repopulateTable(categories.value.toLowerCase());
-            }
-
-            let repopulateTable = function (category) {
-                for (let i = 1; i < articleRows.length; i++) {
-                    let row = articleRows[i];
-                    let rowData = row.getElementsByTagName("td");
-                    row.style.display = "";
-                    let itemCategory = rowData[3].innerText.toLowerCase();
-
-                    if (itemCategory === category || category === "all")
-                        row.style.display = "";
-                    else
-                        row.style.display = "none";
-                }
-            };
-        }        
-    </script>
-} *@

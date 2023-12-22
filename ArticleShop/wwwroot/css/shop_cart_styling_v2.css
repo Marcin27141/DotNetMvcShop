@@ -90,3 +90,15 @@
     padding-right: 10px;
     border-radius: 10px;
 }
+
+.remove-all {
+    text-align: center;
+}
+
+.remove-all .remove-all-button {
+    background-color: red;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 10px;
+}
