@@ -1,0 +1,75 @@
+﻿.outer-form-container {
+    height: 100%;
+    border-radius: 20px;
+    width: 500px;
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.6px);
+    -webkit-backdrop-filter: blur(4.6px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+form {
+    min-width: 500px;
+}
+
+.outer-form-container .form-group {
+    margin: 30px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.outer-form-container .form-group label {
+    color: black;
+    font-size: 20px;
+    padding-bottom: 5px
+}
+
+.outer-form-container .select-container select {
+    width: 100%;
+}
+
+.outer-form-container .form-group input, select {
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 12px;
+}
+
+.outer-form-container input[readonly] {
+    background-color: lightgray;
+    font-style: italic;
+}
+
+.outer-form-container select {
+    width: 100%;
+}
+
+.select-container select option:checked {
+    color: black;
+    background-color: lightblue;
+}
+
+.outer-select-container a {
+    text-decoration: none;
+    color: gray;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.outer-form-container form button {
+    background-color: limegreen;
+    color: white;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 30px;
+    margin-top: 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.return-link {
+    margin-top: 20px;
+    font-size: 20px;
+}

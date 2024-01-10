@@ -1,0 +1,58 @@
+﻿@page
+@model ShopRazor.Pages.Categories.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/list_with_search.css" />
+}
+
+<div class="table-container">
+    <h1>Categories</h1>
+    <div class="upper-div">
+        <input type="search" id="searchbar" placeholder="Search.." name="query">
+        <p class="newLink">
+            <a asp-page="./Create">Create a new category</a>
+        </p>
+    </div>
+    <table class="main-table" id="searchTable">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                ID
+            </th>
+            <th>
+                Is Promo?
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var category in Model.Category)
+        {
+            <tr>
+                <td>
+                    @category.Name
+                </td>
+                <td>
+                    @category.Id
+                </td>
+                <td>
+                    @category.IsPromo
+                </td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@category.Id">Edit</a> |
+                    <a asp-page="Details" asp-route-id="@category.Id">Details</a> |
+                    <a asp-page="Delete" asp-route-id="@category.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/listWithSearch.js"></script>
+}

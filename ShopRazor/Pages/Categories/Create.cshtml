@@ -1,0 +1,42 @@
+﻿@page
+@model ShopRazor.Pages.Categories.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/form_styling.css" />
+}
+
+<div class="outer-form-container">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="@Model.Category.Name" class="control-label"></label>
+            <input asp-for="@Model.Category.Name" class="form-control" />
+            <span asp-validation-for="@Model.Category.Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group checkbox-group">
+            <label asp-for="@Model.Category.IsPromo"></label>
+            <input asp-for="@Model.Category.IsPromo" style="height:20px;width:20px" />
+            <span asp-validation-for="@Model.Category.IsPromo"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

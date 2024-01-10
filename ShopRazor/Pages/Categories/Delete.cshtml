@@ -1,0 +1,34 @@
+﻿@page
+@model ShopRazor.Pages.Categories.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+@section styles {
+    <link rel="Stylesheet" href="~/css/single_result_v2.css" />
+    <link rel="Stylesheet" href="~/css/delete_item.css" />
+}
+
+
+<h3 class="title">Are you sure you want to delete @(Model.Category.Name)?</h3>
+
+<div class="single-result">
+    <h1>@Model.Category.Name</h1>
+    <div class="key-value-result">
+        <h2>Name</h2>
+        <h4>@Model.Category.Name</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Id</h2>
+        <h4>@Model.Category.Id</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Is Promo?</h2>
+        <h4>@Model.Category.IsPromo</h4>
+    </div>
+</div>
+<div class="button-div">
+    <form method="post">
+        <input type="submit" value="Delete" class="btn btn-danger" />
+    </form>
+</div>

@@ -1,0 +1,15 @@
+﻿.title {
+    margin-top: 0px;
+    margin-bottom: 40px;
+    font-size: 30px;
+}
+
+.button-div {
+    margin-top: 30px;
+}
+
+    .button-div input[type=submit] {
+        font-size: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }

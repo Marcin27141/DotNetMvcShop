@@ -19,10 +19,11 @@ namespace ShopRazor.Repositories.CategoryRepository
             _context = context;
             _articleCleanUp = articleCleanUp;
         }
-        public async Task Add(Category category)
+        public async Task<Guid> Add(Category category)
         {
             _context.Add(category);
             await _context.SaveChangesAsync();
+            return category.Id;
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync()
