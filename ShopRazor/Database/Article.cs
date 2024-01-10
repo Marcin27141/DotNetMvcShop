@@ -13,7 +13,7 @@ namespace ShopRazor.Database
         public DateOnly ExpiryDate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
 
         //relations
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
         public Guid CategoryId { get; set; }
     }
 }

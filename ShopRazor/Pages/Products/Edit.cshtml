@@ -1,0 +1,33 @@
+﻿@page
+@using ShopRazor.Database
+@using ShopRazor.ViewModels
+@model ShopRazor.Pages.Products.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+@section styles {
+    <link rel="Stylesheet" href="~/css/form_styling.css" />
+}
+
+<div class="outer-form-container">
+    <form method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @await Html.PartialAsync("_ArticleProperties", new FormArticle(Model.Article, Model.DefaultImagePath, Model.AvailableCategories))
+
+        <div class="form-group">
+            <button type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,49 @@
+﻿@model ViewModels.FormArticle
+@{
+    var imagePath = Model.ImagePath ?? Model.DefaultImageSrc;
+}
+
+<input asp-for="Id" hidden class="form-control" />
+<input asp-for="ImagePath" hidden value="@imagePath" class="form-control" />
+
+<div class="form-group">
+    <img src="@imagePath" id="preview" alt="Your image" />
+    <input asp-for="FormFile" class="form-control custom-file-input" onchange="previewFile(event)" />
+    <p id="removeImage" onclick="removeImage()" style="cursor:pointer">Remove image</p>
+</div>
+<div class="form-group">
+    <label asp-for="Name" class="control-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Price" class="control-label"></label>
+    <input asp-for="Price" class="form-control" />
+    <span asp-validation-for="Price" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="ExpiryDate" class="control-label"></label>
+    <input asp-for="ExpiryDate" type="date" class="form-control" />
+    <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Category" class="control-label"></label>
+    <select asp-for="CategoryId" asp-items="@Model.AvailableCategories"></select>
+    <span asp-validation-for="Category"></span>
+</div>
+
+<script>
+    var removeImage = function () {
+        var image = document.getElementById('preview');
+        image.src = "@Model.DefaultImageSrc";
+    }
+
+    var previewFile = function (event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+</script>

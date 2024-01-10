@@ -1,0 +1,58 @@
+﻿@page
+@model ShopRazor.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/grid_with_search_v2.css" />
+}
+
+
+<div class="table-container">
+    <h1>Articles</h1>
+    <div class="upper-div">
+        <form method="post">
+            <input type="search" id="searchbar" placeholder="Search.." name="searchValue">
+            <input type="submit" value="Search" />
+        </form>
+
+        <p class="newLink">
+            <a asp-page="Create">Create New</a>
+        </p>
+    </div>
+
+    @if (Model.Article.Count() > 0)
+    {
+        <div class="container mt-5 article-grid">
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                @foreach (var article in Model.Article)
+                {
+                    <div class="col grid-col">
+                        <div class="card">
+                            <img class="card-img-top" src="@article.ImagePath" alt="@article.Name image" height="250" width="250">
+                            <div class="card-body">
+                                <h5 class="card-title">@article.Name</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Price: @(article.Price)$</li>
+                                <li class="list-group-item">Category: <span class="article-category">@article.Category.Name</span></li>
+                                <li class="list-group-item">Expires: @article.ExpiryDate</li>
+                            </ul>
+                            <div class="card-body">
+                                <a asp-page="Edit" asp-route-id="@article.Id" class="card-link">Edit</a>
+                                <a asp-page="Details" asp-route-id="@article.Id" class="card-link">Details</a>
+                                <a asp-page="Delete" asp-route-id="@article.Id" class="card-link">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    } else
+    {
+        <h1>No results found</h1>
+    }
+</div>
+

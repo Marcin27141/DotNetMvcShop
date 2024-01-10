@@ -1,0 +1,41 @@
+﻿@page
+@model ShopRazor.Pages.Products.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/single_result_v2.css" />
+}
+
+<div class="single-result">
+    <h1>@Model.Article.Name</h1>
+    <div class="image-div">
+        <img src="@Model.Article.ImagePath" alt="@Model.Article.Name image" />
+    </div>
+    <div class="key-value-result">
+        <h2>Name</h2>
+        <h4>@Model.Article.Name</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Id</h2>
+        <h4>@Model.Article.Id</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Price</h2>
+        <h4>@Model.Article.Price</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Expiry date</h2>
+        <h4>@Model.Article.ExpiryDate</h4>
+    </div>
+    <div class="key-value-result">
+        <h2>Categories</h2>
+        <h4>@Model.Article.Category?.Name</h4>
+    </div>
+</div>
+<div>
+    <a asp-page="Edit" asp-route-id="@Model.Article.Id">Edit</a> |
+    <a asp-page="Index">Back to List</a>
+</div>
