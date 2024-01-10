@@ -6,6 +6,8 @@ using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
 using System.Buffers;
 using System.Collections.Generic;
 using static ArticleShop.Models.CartViewModel;
@@ -47,6 +49,7 @@ namespace ArticleShop.Controllers
                 {
                     TempData[article.Id.ToString()] = quantity;
                 }
+                TempData["role"] = HttpContext.Request.Cookies["role"];
             }
         }
 
@@ -100,5 +103,16 @@ namespace ArticleShop.Controllers
                 TempData.Remove(articleId.ToString());
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public ActionResult ChooseRole(string role)
+        {
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddSeconds(60 * 60 * 24 * 7);
+            HttpContext.Response.Cookies.Append("role", role, option);
+            TempData["role"] = role;
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

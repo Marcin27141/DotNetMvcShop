@@ -15,6 +15,19 @@
         margin-bottom: 40px;
     }
 
+.roleDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+.roleButton {
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .upper-div {
     display: flex;
     flex-direction: column;

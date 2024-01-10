@@ -8,6 +8,8 @@
     <link rel="Stylesheet" href="~/css/shop_cart_styling_v2.css" />
 }
 
+<h6>Your current role: @(TempData.Peek("role") ?? "Not set")</h6>
+
 @if (Model.CartArticles.Count() > 0)
 {
     <div class="table-container">

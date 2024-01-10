@@ -24,6 +24,13 @@ namespace ArticleShop.Controllers
         public async Task<ActionResult> Index()
         {
             var cartArticles = await _cartRepository.GetArticlesInCartAsync(HttpContext);
+            var cookies = HttpContext.Request.Cookies;
+
+            if (cookies != null)
+            {
+                var roleCookie = cookies["role"];
+                TempData["role"] = roleCookie;
+            }
             return View(new CartViewModel(cartArticles.Select(kvp => new CartArticle(kvp.Key, kvp.Value)).OrderBy(c => c.Article.Name)));
         }
 

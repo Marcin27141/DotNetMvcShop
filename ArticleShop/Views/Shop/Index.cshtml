@@ -5,10 +5,22 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/shop_list_styling_v3.css" />
+    <link rel="Stylesheet" href="~/css/shop_list_styling_v4.css" />
 }
 
 <div class="table-container">
+    <div class="roleDiv">
+        <h2>Choose Your Role</h2>
+        <h6>Your current role: @(TempData.Peek("role") ?? "Not set")</h6>
+
+        @using (Html.BeginForm("ChooseRole", "Shop", FormMethod.Get))
+        {
+            <button class="roleButton" type="submit" name="role" value="customer">Customer</button>
+            <button class="roleButton" type="submit" name="role" value="seller">Seller</button>
+        }
+    </div>
+    
+
     <h1>Articles</h1>
     <div class="upper-div">
         <form asp-action="Search" method="get">
