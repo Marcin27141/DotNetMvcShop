@@ -5,7 +5,7 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/shop_cart_styling_v2.css" />
+    <link rel="Stylesheet" href="~/css/shop_cart_styling_v3.css" />
 }
 
 <h6>Your current role: @(TempData.Peek("role") ?? "Not set")</h6>
@@ -86,6 +86,11 @@
             }
         </table>
         <h2>Total cost: @Model.CartArticles.Sum(a => a.Article.Price * a.Quantity)</h2>
+        <form asp-action="FinalizeOrder" method="get">
+            <button type="submit" class="finalize-button">
+                Finalize Order
+            </button>
+        </form>
     </div>
 } else
 {

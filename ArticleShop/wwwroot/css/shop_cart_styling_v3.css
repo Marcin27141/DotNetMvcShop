@@ -102,3 +102,10 @@
     padding-right: 5px;
     border-radius: 10px;
 }
+
+.finalize-button {
+    background-color: lawngreen;
+    padding: 6px;
+    border-radius: 5px;
+    font-weight: bolder;
+}

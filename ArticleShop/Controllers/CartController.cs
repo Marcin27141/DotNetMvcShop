@@ -4,6 +4,7 @@ using ArticleShop.Repositories.ArticleRepository;
 using ArticleShop.Repositories.CartRepository;
 using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Buffers;
@@ -12,6 +13,7 @@ using static ArticleShop.Models.CartViewModel;
 
 namespace ArticleShop.Controllers
 {
+    [Authorize(Policy = "IsNotAdmin")]
     public class CartController : Controller
     {
         private readonly ICartRepository _cartRepository;
@@ -55,6 +57,13 @@ namespace ArticleShop.Controllers
         {
             _cartRepository.RemoveAllFromCart(HttpContext, articleId);
             TempData.Remove(articleId.ToString());
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult FinalizeOrder()
+        {
             return RedirectToAction(nameof(Index));
         }
     }

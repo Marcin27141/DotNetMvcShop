@@ -1,5 +1,6 @@
 ﻿using ArticleShop.Models.Database;
 using ArticleShop.Repositories.CategoryRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,11 +27,13 @@ namespace ArticleShop.Controllers
             return category is null ? NotFound() : View(category);
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: CategoriesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -41,6 +44,7 @@ namespace ArticleShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: CategoriesController/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
@@ -48,6 +52,7 @@ namespace ArticleShop.Controllers
             return category is null ? NotFound() : View(category);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: CategoriesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -58,6 +63,7 @@ namespace ArticleShop.Controllers
             return RedirectToAction(nameof(Details), new { id });
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: CategoriesController/Delete/5
         public async Task<ActionResult> Delete(Guid id)
         {
@@ -65,6 +71,7 @@ namespace ArticleShop.Controllers
             return category is null ? NotFound() : View(category);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: CategoriesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

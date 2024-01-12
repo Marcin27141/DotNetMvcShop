@@ -4,8 +4,12 @@ using ArticleShop.Repositories.ArticleRepository;
 using ArticleShop.Repositories.CartRepository;
 using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,12 @@ builder.Services.AddScoped<IArticleCleanUp, ArticleCleanUp>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("IsNotAdmin", policy =>
+        policy.RequireAssertion(sth => !sth.User.IsInRole("Admin")));
+
+
 
 
 
@@ -48,6 +58,20 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+
+
+using (var scope = app.Services.CreateScope())
+{
+    //var someService = app.Services.GetService<UserManager<IdentityUser>>();
+    //var otherService = app.Services.GetService<RoleManager<IdentityRole>>();
+
+    IdentityInitializer.SeedData(
+        scope.ServiceProvider.GetService<UserManager<IdentityUser>>(),
+        scope.ServiceProvider.GetService<RoleManager<IdentityRole>>()
+    );
+}
+
 
 app.MapControllerRoute(
     name: "default",

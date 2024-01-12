@@ -3,6 +3,7 @@ using ArticleShop.Models.Database;
 using ArticleShop.Repositories.ArticleRepository;
 using ArticleShop.Repositories.CategoryRepository;
 using ArticleShop.Repositories.ImageRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -46,6 +47,7 @@ namespace ArticleShop.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View(new FormArticle(new Article(), _imageRepository.GetDefaultImagePath())
@@ -54,6 +56,7 @@ namespace ArticleShop.Controllers
         });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([FromForm] FormArticle article)
@@ -65,6 +68,7 @@ namespace ArticleShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(Guid id)
         {
             var article = await _articleRepository.GetByIdAsync(id);
@@ -75,6 +79,7 @@ namespace ArticleShop.Controllers
                 });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid id, [FromForm] FormArticle updatedArticle)
@@ -92,12 +97,14 @@ namespace ArticleShop.Controllers
             return RedirectToAction(nameof(Details), new { id });
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(Guid id)
         {
             var article = await _articleRepository.GetByIdAsync(id);
             return article is null ? NotFound() : View(article);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Guid id, IFormCollection collection)
