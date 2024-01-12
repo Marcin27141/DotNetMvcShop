@@ -1,0 +1,63 @@
+﻿@page
+@model ShopRazor.Pages.ShopModel
+@{
+    ViewData["Title"] = "Shop";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/shop_list_styling_v4.css" />
+}
+
+<div class="table-container">
+    <h1>Articles</h1>
+    <div class="upper-div">
+        <form method="post" asp-page-handler="search">
+            <input type="search" id="searchbar" placeholder="Search.." name="searchValue">
+            <input type="submit" value="Search" />
+        </form>
+        <form method="post" asp-page-handler="category">
+            <select asp-for="CategoryId" name="categoryId" asp-items="@Model.AvailableCategories" id="searchedCategory" style="margin:20px;"></select>
+            <input type="submit" value="Filter" />
+        </form>
+    </div>
+    <table class="main-table" id="searchTable">
+        <tr>
+            <th>
+                Photo
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Category
+            </th>
+            <th>
+                Expires
+            </th>
+        </tr>
+
+        @foreach (var article in Model.Articles)
+        {
+            <tr>
+                <td>
+                    <img src="@article.ImagePath" height="80" width="80" alt="@article.Name image" />
+                </td>
+                <td>
+                    @article.Name
+                </td>
+                <td>
+                    @article.Price
+                </td>
+                <td>
+                    @article.Category?.Name
+                </td>
+                <td>
+                    @article.ExpiryDate
+                </td>
+            </tr>
+        }
+    </table>
+</div>

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotnetList5Task2", "DotnetL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticleShop", "ArticleShop\ArticleShop.csproj", "{0297C29E-CB3B-4785-9123-37EBAA0130C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopRazor", "ShopRazor\ShopRazor.csproj", "{68D32F46-4921-4251-A526-E30DC9072894}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopRazor", "ShopRazor\ShopRazor.csproj", "{68D32F46-4921-4251-A526-E30DC9072894}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
