@@ -8,6 +8,73 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ArticleShop.styles.css" asp-append-version="true" />
     @RenderSection("styles", false)
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        header {
+            width: 100%;
+            z-index: 100;
+            margin: 0;
+            margin-bottom: 50px;
+        }
+
+        /* Provide sufficient contrast against white background */
+        a {
+            color: #0366d6;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #1b6ec2;
+            border-color: #1861ac;
+        }
+
+        /* Sticky footer styles
+        -------------------------------------------------- */
+        html {
+            font-size: 14px;
+        }
+
+        .border-top {
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .box-shadow {
+            box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+        }
+
+        button.accept-policy {
+            font-size: 1rem;
+            line-height: inherit;
+        }
+
+        /* Sticky footer styles
+        -------------------------------------------------- */
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            /* Margin bottom by footer height */
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            white-space: nowrap;
+            line-height: 60px; /* Vertically center the text there */
+        }
+
+    </style>
 </head>
 <body>
     <header>
@@ -40,22 +107,22 @@
             </div>
         </nav>
     </header>
-    <main class="outer-main">
-        <div class="inner-main">
+    <div class="container">
+        <main role="main" class="pb-3">
             @RenderBody()
-            @await RenderSectionAsync("return_link", required: false)
-        </div>
+        </main>
+    </div>
 
-    </main>
-
-    <footer>
-        <div class="footer-container">
+    <footer class="border-top footer text-muted">
+        <div class="container">
             &copy; 2023 - ArticleShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

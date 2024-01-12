@@ -1,10 +1,12 @@
 ﻿using ArticleShop.Repositories.ImageRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ArticleShop.Models.Database
 {
-    public class ShopDbContext: DbContext
+    public class ShopDbContext: IdentityDbContext
     {
         private readonly IServiceProvider _serviceProvider;
 
