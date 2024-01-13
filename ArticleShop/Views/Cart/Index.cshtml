@@ -86,7 +86,7 @@
             }
         </table>
         <h2>Total cost: @Model.CartArticles.Sum(a => a.Article.Price * a.Quantity)</h2>
-        <form asp-action="FinalizeOrder" method="get">
+        <form asp-controller="OrderFinalization" method="get">
             <button type="submit" class="finalize-button">
                 Finalize Order
             </button>

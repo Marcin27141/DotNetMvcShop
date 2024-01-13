@@ -5,7 +5,6 @@ namespace ArticleShop.Models
 {
     public class CartViewModel
     {
-        public record CartArticle(Article Article, int Quantity);
         public IEnumerable<CartArticle> CartArticles { get; set; }
 
         public CartViewModel(IEnumerable<CartArticle> CartArticles)
