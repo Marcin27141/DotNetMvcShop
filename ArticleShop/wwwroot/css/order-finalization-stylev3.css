@@ -1,4 +1,4 @@
-﻿.radio {
+﻿/*.radio {
     display: inline-block;
     width: 204px;
     height: 64px;
@@ -15,6 +15,25 @@
 }
 
 .radio.selected {
+    box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.4);
+}*/
+
+[type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.radio-label:hover {
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+}
+
+[type=radio] + img {
+    cursor: pointer;
+}
+
+[type=radio]:checked + img {
     box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.4);
 }
 

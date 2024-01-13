@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static ArticleShop.Models.CartViewModel;
 
 namespace ArticleShop.Models
 {
-    public class OrderFinalizationViewModel
+    public class OrderFinalizationViewModel(
+        IEnumerable<CartArticle> articles,
+        List<PaymentMethod> paymentMethods
+        )
     {
-        public IEnumerable<CartArticle> OrderedArticles { get; set; }
-        public DeliveryViewModel DeliveryInfo { get; set; }
+        public IEnumerable<CartArticle> OrderedArticles { get; set; } = articles;
+        public DeliveryViewModel DeliveryInfo { get; set; } = new();
+        public List<PaymentMethod> PaymentMethods { get; set; } = paymentMethods;
         [Required]
-        public string? PaymentOption { get; set; }
+        public Guid PaymentOption { get; set; }
     }
 }

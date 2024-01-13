@@ -5,15 +5,15 @@
 }
 
 @section styles {
-    <link rel="Stylesheet" href="~/css/order-finalization-style.css" />
+    <link rel="Stylesheet" href="~/css/order-finalization-stylev3.css" />
 }
 
 <div class="container" >
     <h1 class="text-center my-2">Order finalization</h1>
-    <form>
-        <div class="row g-3 gx-3">
-            <div class="col-lg-6 border border-1">
-                <div class="p-2">
+    <form method="post" asp-action="Finalize">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="p-2 border border-1">
                     <h3 class="text-center">Order content:</h3>
                     <div class="table-container">
                         <table class="table">
@@ -56,8 +56,8 @@
                     <h3>Total price: @Model.OrderedArticles.Sum(item => item.Quantity * item.Article.Price)$</h3>
                 </div>   
             </div>
-            <div class="col-lg-6 border border-1">
-                <div class="p-3">
+            <div class="col-lg-6">
+                <div class="p-3 border border-1">
                     <div class="outer-form-container">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -113,7 +113,22 @@
                 
         </div>
         <div class="row justify-content-center py-3">
-            <div class="col-lg-4 d-flex justify-content-center">
+            @{var isFirstMethod = true;}
+            @foreach(var method in Model.PaymentMethods)
+            {
+                <div class="col-lg-4 d-flex justify-content-center">
+                    <div class="form-check form-check-inline">
+                        @* <div class='radio' data-value="@method.Name"><img src="@method.LogoUrl" width="200" height="60"></div> *@
+                        @* <input type="radio" asp-for=PaymentOption class="radio" value="@method.Id" name="PaymentOption" /> *@
+                        <label class="radio-label">
+                            <input type="radio" asp-for=PaymentOption class="radio" value="@method.Id" name="PaymentOption" checked="@isFirstMethod"/>
+                            <img src="@method.LogoUrl" width="200" height="60" alt="@method.Name">
+                        </label>
+                        @{isFirstMethod = false;}
+                    </div>
+                </div>
+            }
+            @* <div class="col-lg-4 d-flex justify-content-center">
                 <div class="form-check form-check-inline">
                     <div class='radio' data-value="credit"><img src="https://i.imgur.com/28akQFX.jpg" width="200" height="60"></div>
 
@@ -130,12 +145,12 @@
                     <div class='radio' data-value="blik"><img src="https://prowly-uploads.s3.eu-west-1.amazonaws.com/uploads/landing_page/template_background/87888/dd1f56953d31387f206bb0d1e41c9300.jpg" width="200" height="60"></div>
 
                 </div>
-            </div>
+            </div> *@
         </div>
         <div class="row justify-content-center py-3">
             <div class="form-group d-flex justify-content-center">
                 <button class="submit-button" type="submit">
-                    Pay
+                    Confirm
                 </button>
             </div>
         </div>
