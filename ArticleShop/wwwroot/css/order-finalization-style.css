@@ -1,0 +1,28 @@
+﻿.radio {
+    display: inline-block;
+    width: 204px;
+    height: 64px;
+    border-radius: 0;
+    background: lightblue;
+    box-sizing: border-box;
+    border: 2px solid lightgrey;
+    cursor: pointer;
+    margin: 8px 25px 8px 0px;
+}
+
+.radio:hover {
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+}
+
+.radio.selected {
+    box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.4);
+}
+
+.submit-button {
+    background-color: limegreen;
+    padding: 5px;
+    padding-left: 50px;
+    padding-right: 50px;
+    border-radius: 5px;
+    color: white;
+}
