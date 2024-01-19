@@ -9,7 +9,7 @@ namespace ShopRazor.Repositories.CategoryRepository
         IEnumerable<SelectListItem> GetSelectListCategories();
         Task<Category?> GetByIdAsync(Guid id);
         Task<Guid> Add(Category category);
-        Task<bool> Remove(Guid id);
+        Task<bool> RemoveSafe(Guid id);
         Task Remove(Category category);
         Task Update(Category category);
 

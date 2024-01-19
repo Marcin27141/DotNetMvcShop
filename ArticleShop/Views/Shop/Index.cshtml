@@ -72,8 +72,8 @@
                 </td>
                 <td>
                     @{
-                        var quantity = TempData.Peek(article.Id.ToString());
-                        bool isDisabled = quantity is null;
+                        var quantity = Model.ArticlesInCart.GetValueOrDefault(article.Id, 0);
+                        bool isDisabled = quantity == 0;
                     }
                     <div class="add-remove-buttons">
                         <form asp-action="RemoveFromCart" method="get">
@@ -82,7 +82,7 @@
                                 -
                             </button>
                         </form>
-                        <p>@(quantity ?? 0)</p>
+                        <p>@quantity</p>
                         <form asp-action="AddToCart" method="get">
                             <input type="hidden" name="articleId" value="@article.Id" />
                             <button type="submit" class="add-to-cart-button">
@@ -90,9 +90,6 @@
                             </button>
                         </form>
                     </div>
-                    @{
-                        TempData.Keep(article.Id.ToString());
-                    }
                 </td>
             </tr>
         }

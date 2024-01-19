@@ -44,7 +44,7 @@ namespace ShopRazor.Pages.Categories
             if (category != null)
             {
                 Category = category;
-                await _categoryRepository.Remove(Category);
+                await _categoryRepository.RemoveSafe(Category.Id);
             }
 
             return RedirectToPage("./Index");

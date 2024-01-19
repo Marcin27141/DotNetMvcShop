@@ -41,7 +41,7 @@ namespace ShopRazor.Repositories.CategoryRepository
             return _context.Categories.Select(cat => new SelectListItem() { Text = cat.Name, Value = cat.Id.ToString() }).OrderBy(cat => cat.Text);
         }
 
-        public async Task<bool> Remove(Guid id)
+        public async Task<bool> RemoveSafe(Guid id)
         {
             var toRemove = await GetByIdAsync(id);
             if (toRemove != null)

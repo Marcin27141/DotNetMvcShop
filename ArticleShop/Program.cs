@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using ArticleShop.Repositories.PaymentRepository;
+using ArticleShop.Repositories.CookieRepository;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ShopDbContext>();
 
+builder.Services.AddScoped<ICookieNameProvider, CookieNameProvider>();
 builder.Services.AddScoped<IArticleCleanUp, ArticleCleanUp>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();

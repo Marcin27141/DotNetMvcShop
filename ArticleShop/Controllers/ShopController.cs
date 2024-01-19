@@ -32,25 +32,20 @@ namespace ArticleShop.Controllers
 
         public async Task<IActionResult> Index(string? searchValue)
         {
-            await SetUpTempData();
+            TempData["role"] = HttpContext.Request.Cookies["role"];
             IEnumerable<SelectListItem> categories = await GetCategoriesWithAllOption();
+            
             return View(new ShopViewModel(
                 searchValue == null ? await _articleRepository.GetAllAsync() : await GetFilteredArticles(searchValue),
+                await GetArticleIdToQuantityInCart(),
                 categories
                 ));
         }
 
-        private async Task SetUpTempData()
+        private async Task<Dictionary<Guid, int>> GetArticleIdToQuantityInCart()
         {
-            if (!TempData.Any(kvp => Guid.TryParse(kvp.Key, out Guid result)))
-            {
-                var cartArticles = await _cartRepository.GetArticlesInCartAsync(HttpContext);
-                foreach (var (article, quantity) in cartArticles)
-                {
-                    TempData[article.Id.ToString()] = quantity;
-                }
-                TempData["role"] = HttpContext.Request.Cookies["role"];
-            }
+            var articlesInCart = await _cartRepository.GetArticlesInCartAsync(HttpContext);
+            return articlesInCart.Select(kvp => KeyValuePair.Create(kvp.Key.Id, kvp.Value)).ToDictionary();
         }
 
         private async Task<IEnumerable<Article>> GetFilteredArticles(string searchValue)
@@ -79,8 +74,9 @@ namespace ArticleShop.Controllers
         {
             var articles = await _articleRepository.GetAllAsync();
             var model = new ShopViewModel(
-            articles.Where(a => a.CategoryId.ToString().Equals(categoryId)),
-            await GetCategoriesWithAllOption()
+                articles.Where(a => a.CategoryId.ToString().Equals(categoryId)),
+                await GetArticleIdToQuantityInCart(),
+                await GetCategoriesWithAllOption()
             );
             return View(nameof(Index), model);
         }
@@ -89,18 +85,13 @@ namespace ArticleShop.Controllers
         public ActionResult AddToCart(Guid articleId)
         {
             var quantity = _cartRepository.AddToCart(HttpContext, articleId);
-            TempData[articleId.ToString()] = quantity;
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public ActionResult RemoveFromCart(Guid articleId)
         {
-            int remaining = _cartRepository.RemoveFromCart(HttpContext, articleId);
-            if (remaining > 0)
-                TempData[articleId.ToString()] = remaining;
-            else
-                TempData.Remove(articleId.ToString());
+            _cartRepository.RemoveFromCart(HttpContext, articleId);
             return RedirectToAction(nameof(Index));
         }
 
