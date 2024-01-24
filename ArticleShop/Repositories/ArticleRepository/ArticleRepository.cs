@@ -32,6 +32,16 @@ namespace ArticleShop.Repositories.ArticleRepository
             return await _context.Articles.FindAsync(id);
         }
 
+        public Task<Article?> GetNextById(Guid id)
+        {
+            return _context.Articles.OrderBy(a => a.Id).SkipWhile(a => a.Id <= id).FirstOrDefaultAsync();
+        }
+
+        public Task<Article?> GetPreviousById(Guid id)
+        {
+            return _context.Articles.OrderByDescending(a => a.Id).SkipWhile(a => a.Id <= id).FirstOrDefaultAsync();
+        }
+
         public async Task<bool> Remove(Guid id)
         {
             var toRemove = await GetByIdAsync(id);

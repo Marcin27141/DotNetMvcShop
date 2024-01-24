@@ -71,10 +71,37 @@ namespace ArticleShop.Models.Database
                 new Article()
                 {
                     Id = Guid.NewGuid(),
+                    Name = "Spaghetti",
+                    Price = 9.99M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
+                    ExpiryDate = new DateOnly(2024, 1, 1),
+                    CategoryId = TryGetCategoryId("Food"),
+                },
+                new Article()
+                {
+                    Id = Guid.NewGuid(),
                     Name = "Bird cage",
                     Price = 47.29M,
                     ImagePath = imageRepository.GetDefaultImagePath(),
                     ExpiryDate = new DateOnly(2033, 12, 20),
+                    CategoryId = TryGetCategoryId("Animals")
+                },
+                new Article()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Dog collar",
+                    Price = 29.10M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
+                    ExpiryDate = new DateOnly(2033, 12, 20),
+                    CategoryId = TryGetCategoryId("Animals")
+                },
+                new Article()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Leash",
+                    Price = 12.00M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
+                    ExpiryDate = new DateOnly(2026, 5, 20),
                     CategoryId = TryGetCategoryId("Animals")
                 },
                 new Article()
@@ -89,10 +116,46 @@ namespace ArticleShop.Models.Database
                 new Article()
                 {
                     Id = Guid.NewGuid(),
+                    Name = "Guitar",
+                    Price = 100.00M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
+                    ExpiryDate = new DateOnly(2027, 1, 1),
+                    CategoryId = TryGetCategoryId("Music")
+                },
+                new Article()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Trumpet",
+                    Price = 27.00M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
+                    ExpiryDate = new DateOnly(2027, 1, 1),
+                    CategoryId = TryGetCategoryId("Music")
+                },
+                new Article()
+                {
+                    Id = Guid.NewGuid(),
                     Name = "Gloomhaven",
                     Price = 80.99M,
                     ImagePath = imageRepository.GetDefaultImagePath(),
                     ExpiryDate = new DateOnly(2043, 1, 1),
+                    CategoryId = TryGetCategoryId("Board Game")
+                },
+                new Article()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Ark Nova",
+                    Price = 75.28M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
+                    ExpiryDate = new DateOnly(2033, 1, 1),
+                    CategoryId = TryGetCategoryId("Board Game")
+                },
+                new Article()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Wingspan",
+                    Price = 42.68M,
+                    ImagePath = imageRepository.GetDefaultImagePath(),
+                    ExpiryDate = new DateOnly(2029, 1, 1),
                     CategoryId = TryGetCategoryId("Board Game")
                 });
         }

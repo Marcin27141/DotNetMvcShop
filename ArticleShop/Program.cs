@@ -77,9 +77,6 @@ app.UseAuthorization();
 
 using (var scope = app.Services.CreateScope())
 {
-    //var someService = app.Services.GetService<UserManager<IdentityUser>>();
-    //var otherService = app.Services.GetService<RoleManager<IdentityRole>>();
-
     IdentityInitializer.SeedData(
         scope.ServiceProvider.GetService<UserManager<IdentityUser>>(),
         scope.ServiceProvider.GetService<RoleManager<IdentityRole>>()

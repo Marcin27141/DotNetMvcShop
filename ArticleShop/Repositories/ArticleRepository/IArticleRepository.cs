@@ -6,6 +6,9 @@ namespace ArticleShop.Repositories.ArticleRepository
     {
         Task<IEnumerable<Article>> GetAllAsync();
         Task<Article?> GetByIdAsync(Guid id);
+        Task<Article?> GetNextById(Guid id);
+        Task<Article?> GetPreviousById(Guid id);
+        Task<Article?> GetByIdAsync(Guid id);
         Task Add(Article article);
         Task<bool> Remove(Guid id);
         Task Remove(Article article);
