@@ -23,6 +23,14 @@ namespace ArticleShop.Models.Database
                 };
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
+            if (!roleManager.RoleExistsAsync("SysOp").Result)
+            {
+                IdentityRole role = new()
+                {
+                    Name = "SysOp",
+                };
+                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+            }
         }
 
         public static void SeedOneUser(UserManager<IdentityUser> userManager, string name, string password, string? role = null)
@@ -47,6 +55,7 @@ namespace ArticleShop.Models.Database
             SeedOneUser(userManager, "student2@pwr.edu.pl", "P@ssw0rd");
             SeedOneUser(userManager, "student3@pwr.edu.pl", "P@ssw0rd");
             SeedOneUser(userManager, "admin@pwr.edu.pl", "P@ssw0rd", "Admin");
+            SeedOneUser(userManager, "sysop@pwr.edu.pl", "P@ssw0rd", "SysOp");
         }
 
     }

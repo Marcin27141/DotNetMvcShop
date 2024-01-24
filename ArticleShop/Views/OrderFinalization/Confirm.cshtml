@@ -1,0 +1,128 @@
+﻿@model ArticleShop.Models.OrderFinalizationViewModel
+
+@{
+    ViewData["Title"] = "Finalization";
+}
+
+@section styles {
+    <link rel="Stylesheet" href="~/css/order-finalization-stylev3.css" />
+}
+
+<div class="container">
+    <h1 class="text-center my-2">Confirmation</h1>
+    <form method="post" asp-action="Finalize">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="p-2 border border-1">
+                    <h3 class="text-center">Order content:</h3>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">
+                                        Article
+                                    </th>
+                                    <th scope="col">
+                                        Count
+                                    </th>
+                                    <th scope="col">
+                                        Price
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var counter = 1;
+                                }
+                                @foreach (var item in Model.OrderedArticles)
+                                {
+                                    <tr>
+                                        <th scope="row">@(counter++)</th>
+                                        <td>
+                                            @item.Article.Name
+                                        </td>
+                                        <td>
+                                            @item.Quantity
+                                        </td>
+                                        <td>
+                                            @($"{@item.Article.Price * @item.Quantity}$")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3>Total price: @Model.OrderedArticles.Sum(item => item.Quantity * item.Article.Price)$</h3>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-3 border border-1">
+                    <div class="outer-form-container">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="DeliveryInfo.FirstName" class="control-label"></label>
+                                <input disabled asp-for="DeliveryInfo.FirstName" class="form-control" />
+                                <span asp-validation-for="DeliveryInfo.FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="DeliveryInfo.LastName" class="control-label"></label>
+                                <input disabled asp-for="DeliveryInfo.LastName" class="form-control" />
+                                <span asp-validation-for="DeliveryInfo.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="DeliveryInfo.Email" class="control-label"></label>
+                                <input disabled asp-for="DeliveryInfo.Email" class="form-control" />
+                                <span asp-validation-for="DeliveryInfo.Email" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="DeliveryInfo.City" class="control-label"></label>
+                                <input disabled asp-for="DeliveryInfo.City" class="form-control" />
+                                <span asp-validation-for="DeliveryInfo.City" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="DeliveryInfo.Street" class="control-label"></label>
+                                <input disabled asp-for="DeliveryInfo.Street" class="form-control" />
+                                <span asp-validation-for="DeliveryInfo.Street" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="DeliveryInfo.HouseNumber" class="control-label"></label>
+                                <input disabled asp-for="DeliveryInfo.HouseNumber" class="form-control" />
+                                <span asp-validation-for="DeliveryInfo.HouseNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="DeliveryInfo.PostalCode" class="control-label"></label>
+                                <input disabled asp-for="DeliveryInfo.PostalCode" class="form-control" />
+                                <span asp-validation-for="DeliveryInfo.PostalCode" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row justify-content-center py-3">
+            @foreach (var method in Model.PaymentMethods.Where(p => p.Id == Model.PaymentOption))
+            {
+                <div class="col-lg-4 d-flex justify-content-center">
+                    <div class="form-check form-check-inline">
+                        <label class="radio-label">
+                            <input type="radio" asp-for=PaymentOption class="radio" value="@method.Id" name="PaymentOption" checked="checked" />
+                            <img src="@method.LogoUrl" width="200" height="60" alt="@method.Name">
+                        </label>
+                    </div>
+                </div>
+            }
+        </div>
+    </form>
+</div>

@@ -1,11 +1,14 @@
 ﻿using ArticleShop.Models;
 using ArticleShop.Repositories.CartRepository;
 using ArticleShop.Repositories.PaymentRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using static ArticleShop.Models.CartViewModel;
 
 namespace ArticleShop.Controllers
 {
+    [Authorize]
     public class OrderFinalizationController : Controller
     {
         private readonly ICartRepository _cartRepository;
@@ -34,8 +37,20 @@ namespace ArticleShop.Controllers
                 finalizationModel.DeliveryInfo = deliveryInfo;
                 return View(nameof(Index), finalizationModel);
             }
-                
-            return RedirectToAction(nameof(Index));
+            TempData["finalizationModel"] = JsonSerializer.Serialize<DeliveryViewModel>(deliveryInfo);    
+            return RedirectToAction(nameof(Confirm), new { paymentOption });
+        }
+
+        public async Task<ActionResult> Confirm(Guid paymentOption)
+        {
+            var deliveryViewModel = JsonSerializer.Deserialize<DeliveryViewModel>(TempData["finalizationModel"].ToString());
+            var finalizationModel = await GetOrderFinalizationViewModel();
+            finalizationModel.PaymentOption = paymentOption;
+            finalizationModel.DeliveryInfo = deliveryViewModel;
+
+            _cartRepository.RemoveAllFromCart(HttpContext);
+
+            return View(finalizationModel);
         }
 
         private async Task<OrderFinalizationViewModel> GetOrderFinalizationViewModel()

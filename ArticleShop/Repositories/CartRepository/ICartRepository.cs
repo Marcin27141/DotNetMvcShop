@@ -14,5 +14,6 @@ namespace ArticleShop.Repositories.CartRepository
         int RemoveFromCart(HttpContext context, Guid id);
 
         void RemoveAllFromCart(HttpContext context, Guid id);
+        void RemoveAllFromCart(HttpContext context);
     }
 }

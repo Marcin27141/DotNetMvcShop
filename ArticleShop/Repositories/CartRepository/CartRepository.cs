@@ -108,5 +108,12 @@ namespace ArticleShop.Repositories.CartRepository
             if (existing != null)
                 context.Response.Cookies.Delete(cookieKey);
         }
+
+        public void RemoveAllFromCart(HttpContext context)
+        {
+            foreach (var cookie in context.Request.Cookies)
+                if (_cookieProvider.IsCookieBelongingToUser(cookie.Key, context.User))
+                    context.Response.Cookies.Delete(cookie.Key);
+        }
     }
 }
