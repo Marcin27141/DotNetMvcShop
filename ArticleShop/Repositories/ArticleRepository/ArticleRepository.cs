@@ -32,6 +32,12 @@ namespace ArticleShop.Repositories.ArticleRepository
             return await _context.Articles.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Article>> GetChunk(int chunkSize, Guid? afterId)
+        {
+            var articles = afterId == null ? _context.Articles : _context.Articles.Where(a => a.Id > afterId);
+            return await articles.OrderBy(a => a.Id).Take(chunkSize).ToListAsync();
+        }
+
         public Task<Article?> GetNextById(Guid id)
         {
             return _context.Articles

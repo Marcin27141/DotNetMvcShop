@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     var initialPageSize = 8;
+    var chunkSize = 3;
 }
 
 @section styles {
@@ -24,8 +25,8 @@
     </div>
 
     <div class="container mt-5 article-grid">
-        <div id="cards-container" class="row row-cols-1 row-cols-md-4 g-4">
-            @foreach (var article in Model.Take(initialPageSize))
+        <div id="cards-container" class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var article in Model)
             {
                 <div class="col grid-col">
                     <div class="card">
@@ -48,14 +49,16 @@
             }
         </div>
     </div>
-    <span id="lastId" hidden>@Model.Take(initialPageSize).Last().Id</span>
-    <button onclick="jsNext()">Load next</button>
+    <span id="lastId" hidden>@Model.Last().Id</span>
+    @* <button onclick="jsNext()">Load next</button> *@
 </div>
 
 @section Scripts {
     <script>
         let lastIdContainer = document.getElementById("lastId");
         let lastIdOutside = lastIdContainer.innerHTML;
+        let noMoreToLoad = false;
+        let isCurrentlyLoading = false;
 
         
         function createArticleCard(article) {
@@ -144,9 +147,7 @@
             colDiv.classList.add("col", "grid-col");
 
             let cardDiv = getCardDiv()
-            console.log(0);
             colDiv.appendChild(cardDiv);
-            console.log(1);
             return colDiv;
         }
         function jsAjax() {
@@ -156,13 +157,20 @@
                 if (this.status === 200) {
                     try {
                         console.log(this.responseText);
-                        const article = JSON.parse(this.responseText);
-                        console.log(article);
+                        const articles = JSON.parse(this.responseText);
+                        console.log(articles);
                         let cardsContainer = document.getElementById("cards-container");
-                        cardsContainer.appendChild(createArticleCard(article));
-                        //lastIdContainer.innerHTML = article.id
-                        lastIdOutside = article.id
-                        console.log(lastIdOutside)
+                        if (articles.length == 0) {
+                            noMoreToLoad = true;
+                            //window.alert('No more articles.');
+                        } else {
+                            for (article of articles) {
+                                cardsContainer.appendChild(createArticleCard(article));
+                                lastIdOutside = article.id
+                            }
+                            console.log(lastIdOutside)
+                        }
+                        isCurrentlyLoading = false;
                     } catch (e) {
                         console.warn('There was an error in JSON. Could not parse.');
                     }
@@ -173,12 +181,30 @@
                 }
             };
 
-            let str = "/api/articles/next/" + lastIdOutside;
+            //let str = "/api/articles/next/" + lastIdOutside;
+            let str = "/api/articles/chunk/" + @chunkSize + "/" + lastIdOutside;
             xhr.open("get", str)
             xhr.send();
         }
         function jsNext() {
-            jsAjax();
+            if (!noMoreToLoad) {
+                jsAjax();
+            }
+            
         }
+        function isNearBottom() {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollTop = window.scrollY || window.pageYOffset || document.body.scrollTop + (document.documentElement.scrollTop || 0);
+
+            const threshold = 20;
+            return scrollTop > documentHeight - windowHeight - threshold;
+        }
+        window.addEventListener('scroll', function () {
+            if (isNearBottom() && !isCurrentlyLoading) {
+                isCurrentlyLoading = true;
+                jsNext();
+            }
+        });
     </script>
 }

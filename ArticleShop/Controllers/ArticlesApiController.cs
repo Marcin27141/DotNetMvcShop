@@ -51,6 +51,10 @@ namespace ArticleShop.Controllers
         public async Task<Article?> GetNextByIdAsync(Guid id) =>
             await _articleRepository.GetNextById(id);
 
+        [HttpGet("chunk/{size}/{fromId?}")]
+        public async Task<IEnumerable<Article>> GetNextByIdAsync(int size, Guid? fromId) =>
+            await _articleRepository.GetChunk(size, fromId);
+
 
         [HttpPost]
         public async Task<Article?> PostAsync([FromBody] ApiFormArticle newArticle)

@@ -29,7 +29,7 @@ namespace ArticleShop.Controllers
         public async Task<IActionResult> Index(string? searchValue)
         {
             return View(
-                searchValue == null ? await _articleRepository.GetAllAsync() : await GetFilteredArticles(searchValue)
+                searchValue == null ? await _articleRepository.GetChunk(3) : await GetFilteredArticles(searchValue)
                 );
         }
 
