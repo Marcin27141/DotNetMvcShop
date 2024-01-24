@@ -15,11 +15,21 @@ using ArticleShop.Repositories.CookieRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        b => b.AllowAnyHeader()
+        .AllowAnyOrigin()
+        .AllowAnyMethod());
+});
+
 builder.Services.AddSingleton<IImageRepository, ImageRepository>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson();
+
+
 builder.Services.AddDbContextPool<ShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
