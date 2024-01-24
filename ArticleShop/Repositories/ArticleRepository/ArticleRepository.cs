@@ -34,12 +34,19 @@ namespace ArticleShop.Repositories.ArticleRepository
 
         public Task<Article?> GetNextById(Guid id)
         {
-            return _context.Articles.OrderBy(a => a.Id).SkipWhile(a => a.Id <= id).FirstOrDefaultAsync();
+            return _context.Articles
+                .Where(a => a.Id > id)
+                .OrderBy(a => a.Id)
+                .FirstOrDefaultAsync();
+
         }
 
         public Task<Article?> GetPreviousById(Guid id)
         {
-            return _context.Articles.OrderByDescending(a => a.Id).SkipWhile(a => a.Id <= id).FirstOrDefaultAsync();
+            return _context.Articles
+                .Where(a => a.Id < id)
+                .OrderByDescending(a => a.Id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> Remove(Guid id)

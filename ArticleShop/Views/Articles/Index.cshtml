@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    var initialPageSize = 8;
 }
 
 @section styles {
@@ -23,8 +24,8 @@
     </div>
 
     <div class="container mt-5 article-grid">
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            @foreach (var article in Model)
+        <div id="cards-container" class="row row-cols-1 row-cols-md-4 g-4">
+            @foreach (var article in Model.Take(initialPageSize))
             {
                 <div class="col grid-col">
                     <div class="card">
@@ -47,4 +48,137 @@
             }
         </div>
     </div>
+    <span id="lastId" hidden>@Model.Take(initialPageSize).Last().Id</span>
+    <button onclick="jsNext()">Load next</button>
 </div>
+
+@section Scripts {
+    <script>
+        let lastIdContainer = document.getElementById("lastId");
+        let lastIdOutside = lastIdContainer.innerHTML;
+
+        
+        function createArticleCard(article) {
+            function getArticleImage(article) {
+                let imgElement = document.createElement("img");
+                imgElement.classList.add("card-img-top");
+                imgElement.src = article.imagePath;
+                imgElement.alt = article.name + " image";
+                imgElement.height = "250";
+                imgElement.width = "250";
+                return imgElement;
+            }
+            function getCardTitle() {
+                let titleElement = document.createElement("h5");
+                titleElement.classList.add("card-title");
+                titleElement.textContent = article.name;
+                return titleElement;
+            }
+            function getListGroup(article) {
+                let listGroup = document.createElement("ul");
+                listGroup.classList.add("list-group", "list-group-flush");
+
+                let priceItem = document.createElement("li");
+                priceItem.classList.add("list-group-item");
+                priceItem.textContent = "Price: " + article.price + "$";
+
+                let categoryItem = document.createElement("li");
+                categoryItem.classList.add("list-group-item");
+                categoryItem.innerHTML = "Category: <span class='article-category'>" + article.category.name + "</span>";
+
+                let expiresItem = document.createElement("li");
+                expiresItem.classList.add("list-group-item");
+                expiresItem.textContent = "Expires: " + article.expiryDate;
+
+
+                listGroup.appendChild(priceItem);
+                listGroup.appendChild(categoryItem);
+                listGroup.appendChild(expiresItem);
+
+                return listGroup;
+            }
+            function getLinksDiv(article) {
+                function getLink(actionType) {
+                    let link = document.createElement("a");
+                    link.classList.add("card-link");
+                    link.href = "Articles/" + actionType + "/" + article.id;
+                    link.textContent = actionType;
+
+                    return link;
+                }
+
+                let cardBodyLinks = document.createElement("div");
+                cardBodyLinks.classList.add("card-body");
+
+                for (actionType of ["Edit", "Details", "Delete"]) {
+                    cardBodyLinks.appendChild(getLink(actionType));
+                }
+
+                return cardBodyLinks;
+            }
+            function getCardDiv() {
+                function getCardBody() {
+                    let cardBodyDiv = document.createElement("div");
+                    cardBodyDiv.classList.add("card-body");
+                    cardBodyDiv.appendChild(getCardTitle());
+                    return cardBodyDiv;
+                }
+                let cardDiv = document.createElement("div");
+                cardDiv.classList.add("card");
+
+                let imgElement = getArticleImage(article);
+                let cardBodyDiv = getCardBody();
+                let listGroup = getListGroup(article);
+                let cardBodyLinks = getLinksDiv(article);
+
+                cardDiv.appendChild(imgElement);
+                cardDiv.appendChild(cardBodyDiv);
+                cardDiv.appendChild(listGroup);
+                cardDiv.appendChild(cardBodyLinks);
+
+                return cardDiv;
+            }
+            
+            // Create elements
+            let colDiv = document.createElement("div");
+            colDiv.classList.add("col", "grid-col");
+
+            let cardDiv = getCardDiv()
+            console.log(0);
+            colDiv.appendChild(cardDiv);
+            console.log(1);
+            return colDiv;
+        }
+        function jsAjax() {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                console.log(this.status);
+                if (this.status === 200) {
+                    try {
+                        console.log(this.responseText);
+                        const article = JSON.parse(this.responseText);
+                        console.log(article);
+                        let cardsContainer = document.getElementById("cards-container");
+                        cardsContainer.appendChild(createArticleCard(article));
+                        //lastIdContainer.innerHTML = article.id
+                        lastIdOutside = article.id
+                        console.log(lastIdOutside)
+                    } catch (e) {
+                        console.warn('There was an error in JSON. Could not parse.');
+                    }
+                } else if (this.status === 204) { // 204 No Content, so NULL
+                    window.alert("No more articles");
+                } else {
+                    console.warn("Recived " + this.status+" in response code.");
+                }
+            };
+
+            let str = "/api/articles/next/" + lastIdOutside;
+            xhr.open("get", str)
+            xhr.send();
+        }
+        function jsNext() {
+            jsAjax();
+        }
+    </script>
+}

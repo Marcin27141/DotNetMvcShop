@@ -43,6 +43,15 @@ namespace ArticleShop.Controllers
         public async Task<Article?> GetByIdAsync(Guid id) =>
             await _articleRepository.GetByIdAsync(id);
 
+        [HttpGet("prev/{id}")]
+        public async Task<Article?> GetPreviousByIdAsync(Guid id) =>
+            await _articleRepository.GetPreviousById(id);
+
+        [HttpGet("next/{id}")]
+        public async Task<Article?> GetNextByIdAsync(Guid id) =>
+            await _articleRepository.GetNextById(id);
+
+
         [HttpPost]
         public async Task<Article?> PostAsync([FromBody] ApiFormArticle newArticle)
         {
